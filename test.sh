@@ -7,7 +7,7 @@ cd "$(git rev-parse --show-toplevel)/testdata" || exit
 if [ "$1" = "--regenerate" ]; then
     cp .got want
 else
-    diff -u want .got
+    diff --color -u want .got
 fi
 
 cp want .want
