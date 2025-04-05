@@ -15,3 +15,9 @@ It does not care about links within code blocks:
 ```
 [nonexistent](./non.md#existent)
 ```
+
+But it does care about links within comments:
+
+<!--[README](./README.md)-->
+
+This is a trick preserved for MkDocs. MkDocs strictly disallows links outside of the `docs/` directory, in which case you may want to directly link to your documentation site, such as the github version etc. But by bundling in a comment like the one above, you can get static checking for that link via this hidden link. The trick has to be known so it's best to include an explanation with it.
