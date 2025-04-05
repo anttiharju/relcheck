@@ -22,7 +22,10 @@ echo 0 > "$tmp_exit_code"
 
 (
     cd negative || exit
-    ../../check-relative-markdown-links.bash run --verbose > .got
+    # This style of usage is simple, but not compliant with shellcheck
+    # That's the reason why the more complicated usage is bundled in with 'run'
+    # shellcheck disable=SC2046
+    ../../check-relative-markdown-links.bash --verbose $(git ls-files '*.markdown') > .got
 
     if [ "$1" = "--regenerate" ]; then
         cp .got want

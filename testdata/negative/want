@@ -1,2 +1,3 @@
-Usage: ../../check-relative-markdown-links.bash [--verbose] <file1.md> [file2.md] ...
-   or: ../../check-relative-markdown-links.bash [--verbose] run  (to check all *.md files in Git)
+README.markdown:8:37: broken relative link (file not found):
+It catches broken links [README.md](../../REDME.md)
+                                    ^
