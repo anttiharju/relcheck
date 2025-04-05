@@ -2,7 +2,7 @@
 
 [![.github/workflows/validate.yml](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/validate.yml/badge.svg)](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/validate.yml)
 
-Documentation is useful; documentation with broken links to other files in the repository is less so.
+Documentation is useful; documentation with broken relative links is less so.
 
 ## Installation
 
