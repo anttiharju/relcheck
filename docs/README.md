@@ -96,4 +96,4 @@ jobs:
 
 ## Why
 
-This tool was developed alongside and mainly for https://github.com/anttiharju/vmatch. Idea is to have `vmatch` to be as linted as possible to make maintaining the project a breeze. Additionally the tooling built to support it will make my future projects easier to work on, allowing me to mostly focus on functionality without existing things breaking while I refactor the projects to my will
+This tool was developed alongside and mainly for https://github.com/anttiharju/vmatch. Idea is to have `vmatch` to be as linted as possible to make maintaining the project a breeze. Additionally the tooling built to support it will make my future projects easier to work on, allowing me to mostly focus on functionality without existing things breaking while I refactor the projects to my will.
