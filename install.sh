@@ -14,15 +14,15 @@ curl -o "$tmp/check-relative-markdown-links.bash" "$url"
 chmod +x "$tmp/check-relative-markdown-links.bash"
 
 # Store the command parts separately
-src_path="$tmp/check-relative-markdown-links.bash"
-dest_path="/usr/local/bin/check-relative-markdown-links"
+src="$tmp/check-relative-markdown-links.bash"
+dest="/usr/local/bin/check-relative-markdown-links"
 
 # Check if sudo needs a password (exit status 1 means password needed)
 if ! sudo -n true 2>/dev/null; then
     # Sudo needs password, print the command first
     echo ""
-    echo "sudo cp -f $src_path $dest_path"
+    echo "sudo cp -f $src $dest"
 fi
 
 # Run the command with sudo
-sudo cp -f "$src_path" "$dest_path"
+sudo cp -f "$src" "$dest"
