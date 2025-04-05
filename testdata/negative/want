@@ -1,2 +1,2 @@
-✓ README.md: no relative links
-✓ All relative links are valid!
+Usage: ../../check-relative-markdown-links.bash [--verbose] <file1.md> [file2.md] ...
+   or: ../../check-relative-markdown-links.bash [--verbose] run  (to check all *.md files in Git)
