@@ -2,7 +2,20 @@
 
 [![.github/workflows/validate.yml](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/validate.yml/badge.svg)](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/validate.yml)
 
-Documentation is useful; documentation with broken relative links is less so.
+## Why
+
+1. Documentation is useful; documentation with broken relative links is less so.
+2. `mkdocs build --strict` is too strict, can't lint files outside of `docs/` directory.
+3. `markdown-link-check` takes roughly 10 seconds to execute. This (even in large repos) typically runs in milliseconds:
+
+   ```sh
+   time ./check-relative-markdown-links.bash run
+
+   ________________________________________________________
+   Executed in   32.02 millis    fish           external
+     usr time   11.29 millis    0.23 millis   11.05 millis
+     sys time   16.60 millis    1.87 millis   14.73 millis
+   ```
 
 ## Installation
 
