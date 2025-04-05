@@ -57,6 +57,12 @@ if [[ ${#files[@]} -eq 0 ]]; then
     exit 1
 fi
 
+# Function to URL-decode a string
+urldecode() {
+    local url_encoded="${1//+/ }"
+    printf '%b' "${url_encoded//%/\\x}"
+}
+
 exit_code=0
 
 for file in "${files[@]}"; do
@@ -111,8 +117,11 @@ for file in "${files[@]}"; do
 
     # Process each link
     while IFS=: read -r line_num col_num link; do
+        # URL-decode the link to handle spaces and other encoded characters
+        decoded_link=$(urldecode "$link")
+
         # Construct the full path relative to the file's location
-        full_path="$dir/$link"
+        full_path="$dir/$decoded_link"
 
         if [[ ! -e "$full_path" ]]; then
             # Print the file location in bold
