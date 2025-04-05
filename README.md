@@ -78,3 +78,7 @@ jobs:
       - name: check-relative-markdown-links
         uses: anttiharju/actions/check-relative-markdown-links@ea7b38f7de7f143182c29f14ed01cde070c65d7b
 ```
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/anttiharju/check-relative-markdown-links.svg?variant=adaptive)](https://starchart.cc/anttiharju/check-relative-markdown-links)
