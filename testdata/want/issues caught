@@ -1,0 +1,6 @@
+issues caught.markdown:17:54: broken relative link (file not found):
+Broken links, such as typos are caught [../REDME.md](../REDME.md).
+                                                     ^
+issues caught.markdown:21:75: broken relative link (anchor not found):
+Similarly non-existent anchors are also caught [README.md#gitlab-actions](../README.md#gitlab-actions)
+                                                                          ^

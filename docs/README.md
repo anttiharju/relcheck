@@ -1,4 +1,4 @@
-# check-relative-markdown-links
+# Introduction
 
 [![Tests](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/tests.yml/badge.svg)](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/tests.yml) [![Linters](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/linters.yml/badge.svg)](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/linters.yml)
 
@@ -93,3 +93,7 @@ jobs:
 ## Stargazers over time
 
 [![Stargazers over time](https://starchart.cc/anttiharju/check-relative-markdown-links.svg?variant=adaptive)](https://starchart.cc/anttiharju/check-relative-markdown-links)
+
+## Why
+
+This tool was developed alongside and mainly for https://github.com/anttiharju/vmatch. Idea is to have `vmatch` to be as linted as possible to make maintaining the project a breeze. Additionally the tooling built to support it will make my future projects easier to work on, allowing me to mostly focus on functionality without existing things breaking while I refactor the projects to my will
