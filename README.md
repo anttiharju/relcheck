@@ -6,7 +6,7 @@
 
 1. Documentation is useful; documentation with broken relative links is less so.
 2. `mkdocs build --strict` is too strict, can not check files outside of `docs/` directory.
-3. Some existing tools take too long to execute (~10 seconds). This typically runs in milliseconds:
+3. The existing tools I found were too slow, taking up to 10 seconds. This tool typically runs in milliseconds:
 
 ```sh
 time ./check-relative-markdown-links.bash run
