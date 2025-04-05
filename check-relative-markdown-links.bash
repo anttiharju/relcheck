@@ -8,12 +8,23 @@ set -u
 #   or   ./check-relative-markdown-links [--verbose] run
 
 # Terminal colors and formatting
-bold="\033[1m"
-red="\033[31m"
-yellow="\033[33m"
-green="\033[32m"
-gray="\033[90m"
-reset="\033[0m"
+# Check if stdout is a terminal
+if [ -t 1 ]; then
+    bold="\033[1m"
+    red="\033[31m"
+    yellow="\033[33m"
+    green="\033[32m"
+    gray="\033[90m"
+    reset="\033[0m"
+else
+    # If being piped, use empty strings for colors
+    bold=""
+    red=""
+    yellow=""
+    green=""
+    gray=""
+    reset=""
+fi
 
 # Process arguments
 verbose=0
