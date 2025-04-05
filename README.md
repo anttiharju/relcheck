@@ -5,7 +5,7 @@ Documentation is useful; documentation with broken links to other files in the r
 ## Installation
 
 ```sh
-curl -sSfL https://raw.githubusercontent.com/anttiharju/check-relative-markdown-links/HEAD/install.sh | sh
+sudo sh -c "curl -sSfL https://raw.githubusercontent.com/anttiharju/check-relative-markdown-links/HEAD/check-relative-markdown-links.bash -o /usr/local/bin/check-relative-markdown-links && chmod +x /usr/local/bin/check-relative-markdown-links"
 ```
 
 ## Usage
