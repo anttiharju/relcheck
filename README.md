@@ -9,7 +9,7 @@
 3. Other existing tools I found were too slow, taking up to 10 seconds. This tool typically runs in milliseconds:
 
 ```sh
-time ./check-relative-markdown-links.bash run
+time check-relative-markdown-links run
 
 ________________________________________________________
 Executed in   32.02 millis    fish           external
