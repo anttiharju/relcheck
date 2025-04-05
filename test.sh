@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 cd "$(git rev-parse --show-toplevel)/testdata" || exit
 
 ../check-relative-markdown-links.bash run --verbose > .got
