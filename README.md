@@ -16,8 +16,6 @@ and
 sudo ln -sf ~/.anttiharju/check-relative-markdown-links.bash /usr/local/bin/check-relative-markdown-links
 ```
 
-as instructed.
-
 ## Usage
 
 Using defaults inside a git repository:
