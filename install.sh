@@ -6,7 +6,7 @@ mkdir -p ~/.anttiharju
 
 # Download the script to the target directory
 curl -o ~/.anttiharju/check-relative-markdown-links.bash \
-  https://raw.githubusercontent.com/anttiharju/check-relative-markdown-links/6d8b08d943582439a074dc0597c081d48fe09243/check-relative-markdown-links.bash
+    https://raw.githubusercontent.com/anttiharju/check-relative-markdown-links/6d8b08d943582439a074dc0597c081d48fe09243/check-relative-markdown-links.bash
 
 # Make the script executable
 chmod +x ~/.anttiharju/check-relative-markdown-links.bash
