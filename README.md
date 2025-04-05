@@ -1,6 +1,6 @@
 # check-relative-markdown-links
 
-Does exactly what it says on the tin
+Documentation is useful; documentation with broken links to other files in the repository is less so.
 
 ## Installation
 
