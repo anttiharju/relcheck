@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# https://github.com/anttiharju/check-relative-markdown-links
+
 # Check for relative Markdown links and verify they exist
 # Usage: ./check-relative-links.sh [--verbose] file1.md [file2.md] ...
 #   or   ./check-relative-links.sh [--verbose] run
