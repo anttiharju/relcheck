@@ -37,3 +37,25 @@ pre-commit:
     - name: check-relative-markdown-links
       run: check-relative-markdown-links run
 ```
+
+### GitHub Actions
+
+This script has been released as a GitHub Action [here](https://github.com/anttiharju/actions/tree/v0/check-relative-markdown-links). Below is an example of its usage in a workflow file such as `./.github/workflows/validate.yml`:
+
+```yml
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: check-relative-markdown-links
+        uses: anttiharju/actions/check-relative-markdown-links@c90df6253f5cbdd74ac7f483f5b8b192f3b286bf
+```
