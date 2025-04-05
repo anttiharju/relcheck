@@ -8,7 +8,7 @@ echo 0 > "$tmp_exit_code"
 
 (
     cd docs/examples || exit
-    ../../check-relative-markdown-links.bash run --verbose > ../../tests/got/valid-use
+    ../../check-relative-markdown-links.bash run --verbose --color=always > ../../tests/got/valid-use
     cd ../../tests || exit
 
     if [ "$1" = "--regenerate" ]; then
@@ -22,7 +22,7 @@ echo 0 > "$tmp_exit_code"
 
 (
     cd docs/examples || exit
-    ../../check-relative-markdown-links.bash --verbose "$(git ls-files '*.markdown')" > "../../tests/got/issues caught"
+    ../../check-relative-markdown-links.bash --verbose --color=always "$(git ls-files '*.markdown')" > "../../tests/got/issues caught"
     cd ../../tests || exit
 
     if [ "$1" = "--regenerate" ]; then
