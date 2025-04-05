@@ -4,8 +4,8 @@ set -u
 # https://github.com/anttiharju/check-relative-markdown-links
 
 # Check for relative Markdown links and verify they exist
-# Usage: ./check-relative-markdown-links [--verbose] file1.md [file2.md] ...
-#   or   ./check-relative-markdown-links [--verbose] run
+# Usage: check-relative-markdown-links [--verbose] file1.md [file2.md] ...
+#   or   check-relative-markdown-links [--verbose] run
 
 # Terminal colors and formatting
 # Check if stdout is a terminal
