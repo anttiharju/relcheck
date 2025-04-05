@@ -5,3 +5,4 @@ This document demonstrates valid use of relative links within markdown as recogn
 It recognises simple links: [README](./README.md)
 It can follow them upwards: [README](../README.md)
 It works with files that have spaces in their names: [s p a c e s](./s%20p%20a%20c%20e%20s.md)
+It verifies that anchor links exists: [anchors](./anchors.md#hello)
