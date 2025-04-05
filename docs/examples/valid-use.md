@@ -4,14 +4,14 @@ This document demonstrates valid use of relative links within markdown as recogn
 
 ## Links
 
-Simple relative links are recognised [Valid use](./valid-use.md)  
-and so are links that traverse upwards [Introduction](../README.md)  
-even files with spaces in their name are supported! See [Issues caught](./issues%20caught.markdown)
+1. Simple relative links are recognised [Valid use](./valid-use.md)
+2. and so are links that traverse upwards [Introduction](../README.md)
+3. even files with spaces in their name are supported! See [Issues caught](./issues%20caught.markdown)
 
 ## Anchors
 
-Anchors can be validated [Introduction#why](../README.md#why)  
-Even duplicate anchors are supported! [Introduction#why-1](../README.md#why-1)
+1. Anchors can be validated [Introduction#why](../README.md#why)
+2. Even duplicate anchors are supported! [Introduction#why-1](../README.md#why-1)
 
 ## Code blocks
 
