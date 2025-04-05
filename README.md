@@ -25,7 +25,7 @@ sudo sh -c "curl -sSfL https://raw.githubusercontent.com/anttiharju/check-relati
 
 ## Usage
 
-In integrated terminals of editors such as VS Code, the reported broken links such as `dist/brew/README.md:5:19` are clickable (when holding ctrl/cmd) to bring your cursor right to where the ^ indicator points:
+In integrated terminals of editors such as VS Code, the reported broken links such as `dist/brew/README.md:5:19` are clickable when holding ctrl/cmd to bring your cursor right to where the ^ indicator points:
 
 ```sh
 $ check-relative-markdown-links run
