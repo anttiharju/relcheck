@@ -1,6 +1,6 @@
 # check-relative-markdown-links
 
-[![.github/workflows/validate.yml](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/validate.yml/badge.svg)](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/validate.yml)
+[![Build](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/build.yml/badge.svg)](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/build.yml)
 
 ## Why
 
