@@ -25,6 +25,17 @@ sudo sh -c "curl -sSfL https://raw.githubusercontent.com/anttiharju/check-relati
 
 ## Usage
 
+In integrated terminals of editors such as VS Code, the reported broken links such as `dist/brew/README.md:5:19` are clickable (when holding ctrl/cmd) to bring your cursor right to where the ^ indicator points:
+
+```sh
+$ check-relative-markdown-links run
+dist/brew/README.md:5:19: broken relative link (file not found):
+- [`values.bash`](./values.sh) is required by the [render-template](https://github.com/anttiharju/actions/tree/v0/render-template) action.
+                  ^
+```
+
+The `file:line:column` link syntax is the same one that golangci-lint uses in its reporting.
+
 ### Manual
 
 Using defaults inside a Git repository
