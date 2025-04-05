@@ -1,6 +1,8 @@
+[![Build](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/build.yml/badge.svg)](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/build.yml)
+
 # check-relative-markdown-links
 
-[![Build](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/build.yml/badge.svg)](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/build.yml)
+Reports broken relative Markdown links.
 
 ## Why
 
