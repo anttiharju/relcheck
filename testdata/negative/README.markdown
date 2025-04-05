@@ -6,4 +6,4 @@
 This document demonstrates what kinds of issues check-relative-markdown-links tool can catch.
 
 It catches broken links [README.md](../../REDME.md)
-It catches broken anchors [README.md](../../README.md#gitlab-actions)
+It catches broken anchors [README.md](../../docs/README.md#gitlab-actions)

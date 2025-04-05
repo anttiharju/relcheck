@@ -2,5 +2,5 @@ README.markdown:8:37: broken relative link (file not found):
 It catches broken links [README.md](../../REDME.md)
                                     ^
 README.markdown:9:39: broken relative link (anchor not found):
-It catches broken anchors [README.md](../../README.md#gitlab-actions)
+It catches broken anchors [README.md](../../docs/README.md#gitlab-actions)
                                       ^
