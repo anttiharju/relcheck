@@ -9,3 +9,9 @@ It can handle trivial anchor links: [anchors#hello](./anchors.md#hello)
 It can handle non-trivial anchor links: [anchors#i-have-anchors](./anchors.md#i-have-anchors)  
 It can handle duplicate anchor links: [anchors#hello-1](./anchors.md#hello-1)  
 It can handle duplicate anchor links: [anchors#hello-2](./anchors.md#hello-2)
+
+It does not care about links within code blocks:
+
+```
+[nonexistent](./non.md#existent)
+```
