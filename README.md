@@ -1,6 +1,6 @@
 # check-relative-markdown-links
 
-Does exactly what it says on the tin.
+Does exactly what it says on the tin
 
 ## Installation
 
@@ -18,7 +18,7 @@ sudo ln -sf ~/.anttiharju/check-relative-markdown-links.bash /usr/local/bin/chec
 
 ## Usage
 
-Using defaults inside a Git repository:
+Using defaults inside a Git repository
 
 ```sh
 check-relative-markdown-links run
