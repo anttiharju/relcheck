@@ -18,5 +18,5 @@ Broken links, such as typos are caught [../REDME.md](../REDME.md).
 
 ## Anchors
 
-Similarly non-existent anchors are also caught [README.md#gitlab-actions](../README.md#gitlab-actions)
-Non-existent "duplicate" (triplicate?) anchors are also caught [Introduction#why-2](../README.md#why-2)
+1. Similarly non-existent anchors are also caught [README.md#gitlab-actions](../README.md#gitlab-actions)
+2. Non-existent "duplicate" (triplicate?) anchors are also caught [Introduction#why-2](../README.md#why-2)
