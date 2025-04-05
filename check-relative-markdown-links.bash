@@ -4,36 +4,22 @@ set -u
 # https://github.com/anttiharju/check-relative-markdown-links
 
 # Check for relative Markdown links and verify they exist
-# Usage: ./check-relative-markdown-links [--verbose] file1.md [file2.md] ...
-#   or   ./check-relative-markdown-links [--verbose] run
-
-# Terminal colors and formatting
-# Check if stdout is a terminal
-if [ -t 1 ]; then
-    bold="\033[1m"
-    red="\033[31m"
-    yellow="\033[33m"
-    green="\033[32m"
-    gray="\033[90m"
-    reset="\033[0m"
-else
-    # If being piped, use empty strings for colors
-    bold=""
-    red=""
-    yellow=""
-    green=""
-    gray=""
-    reset=""
-fi
+# Usage: ./check-relative-markdown-links [--verbose] [--color=always] file1.md [file2.md] ...
+#   or   ./check-relative-markdown-links [--verbose] [--color=always] run
 
 # Process arguments
 verbose=0
+force_color=0
 files=()
 
 while [[ $# -gt 0 ]]; do
     case $1 in
         --verbose)
             verbose=1
+            shift
+            ;;
+        --color=always)
+            force_color=1
             shift
             ;;
         run)
@@ -52,9 +38,28 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ ${#files[@]} -eq 0 ]]; then
-    echo "Usage: $0 [--verbose] <file1.md> [file2.md] ..."
-    echo "   or: $0 [--verbose] run  (to check all *.md files in Git)"
+    echo "Usage: $0 [--verbose] [--color=always] <file1.md> [file2.md] ..."
+    echo "   or: $0 [--verbose] [--color=always] run (to check all *.md files in Git)"
     exit 1
+fi
+
+# Terminal colors and formatting
+# Default: use colors only when stdout is a terminal
+if [ -t 1 ] || [ "$force_color" -eq 1 ]; then
+    bold="\033[1m"
+    red="\033[31m"
+    yellow="\033[33m"
+    green="\033[32m"
+    gray="\033[90m"
+    reset="\033[0m"
+else
+    # If being piped, use empty strings for colors
+    bold=""
+    red=""
+    yellow=""
+    green=""
+    gray=""
+    reset=""
 fi
 
 # Function to URL-decode a string
