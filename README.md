@@ -87,7 +87,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: check-relative-markdown-links
-        uses: anttiharju/actions/check-relative-markdown-links@ea7b38f7de7f143182c29f14ed01cde070c65d7b
+        uses: anttiharju/actions/check-relative-markdown-links@57292b81785b7e9824a5d643efd89ccd45600013
 ```
 
 ## Stargazers over time
