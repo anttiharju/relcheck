@@ -1,10 +1,12 @@
 #!/bin/sh
 cd "$(git rev-parse --show-toplevel)/testdata" || exit
 
-../check-relative-markdown-links.bash run --verbose > got
+../check-relative-markdown-links.bash run --verbose > .got
 
 if [ "$1" = "--regenerate" ]; then
-    cp got want
+    cp .got want
 else
-    diff -u want got
+    diff -u want .got
 fi
+
+cp want .want
