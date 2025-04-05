@@ -18,13 +18,13 @@ sudo ln -sf ~/.anttiharju/check-relative-markdown-links.bash /usr/local/bin/chec
 
 ## Usage
 
-Using defaults inside a git repository:
+Using defaults inside a Git repository:
 
 ```sh
 check-relative-markdown-links run
 ```
 
-for advanced usage, refer to printed out from
+for advanced usage, refer to printed out info from
 
 ```sh
 check-relative-markdown-links

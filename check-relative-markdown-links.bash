@@ -41,7 +41,7 @@ done
 
 if [[ ${#FILES[@]} -eq 0 ]]; then
     echo "Usage: $0 [--verbose] <file1.md> [file2.md] ..."
-    echo "   or: $0 [--verbose] run  (to check all *.md files in git)"
+    echo "   or: $0 [--verbose] run  (to check all *.md files in Git)"
     exit 1
 fi
 
