@@ -74,5 +74,5 @@ jobs:
         uses: actions/checkout@v4
 
       - name: check-relative-markdown-links
-        uses: anttiharju/actions/check-relative-markdown-links@c90df6253f5cbdd74ac7f483f5b8b192f3b286bf
+        uses: anttiharju/actions/check-relative-markdown-links@ea7b38f7de7f143182c29f14ed01cde070c65d7b
 ```
