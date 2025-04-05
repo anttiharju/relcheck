@@ -1,6 +1,6 @@
 # check-relative-markdown-links
 
-[![Build](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/build.yml/badge.svg)](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/build.yml)
+[![Linting](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/linting.yml/badge.svg)](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/linting.yml)
 
 ## Why
 
