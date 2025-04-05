@@ -2,7 +2,7 @@ output:
   - success
   - failure
 
-# Match to validate.yml
+# Match to linters.yml
 pre-commit:
   parallel: true
   jobs:
@@ -28,3 +28,6 @@ pre-commit:
 
     - name: check-relative-markdown-links
       run: ./check-relative-markdown-links.bash run
+
+    - name: Tests
+      run: ./test.sh
