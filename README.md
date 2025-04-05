@@ -40,7 +40,7 @@ pre-commit:
 
 ### GitHub Actions
 
-This script has been released as a GitHub Action [here](https://github.com/anttiharju/actions/tree/v0/check-relative-markdown-links). Below is an example of its usage in a workflow file such as `./.github/workflows/validate.yml`:
+This script has been released as a GitHub Action [here](https://github.com/anttiharju/actions/tree/v0/check-relative-markdown-links). Below is an example of its usage in a workflow file such as [`./.github/workflows/validate.yml`](./.github/workflows/validate.yml):
 
 ```yml
 on:
