@@ -3,30 +3,13 @@ on:
     branches:
       - main
   pull_request:
-  workflow_call:
 
 jobs:
-  check-relative-markdown-links:
+  validate:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: action-validator
-        uses: anttiharju/actions/action-validator@v0
-
-      - if: always()
-        name: actionlint
-        uses: anttiharju/actions/actionlint@v0
-
-      - if: always()
-        name: ShellCheck
-        uses: anttiharju/actions/shellcheck@v0
-
-      - if: always()
-        name: Prettier
-        uses: anttiharju/actions/prettier@v0
-
-      - if: always()
-        name: EditorConfig-Checker
-        uses: anttiharju/actions/editorconfig-checker@v0
+      - name: check-relative-markdown-links
+        uses: anttiharju/actions/check-relative-markdown-links@c90df6253f5cbdd74ac7f483f5b8b192f3b286bf
