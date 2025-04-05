@@ -39,7 +39,7 @@ for advanced usage, refer to the printed out info from
 check-relative-markdown-links
 ```
 
-### Lefthook
+### Git pre-commit hook (via Lefthook)
 
 [Lefthook](https://github.com/evilmartians/lefthook) is an awesome Git hooks manager. It enables [shift-left testing](https://en.wikipedia.org/wiki/Shift-left_testing) which improves developer experience. `check-relative-markdown-links` was built for usage with Lefthook. Here is a minimal `lefthook.yml` example:
 
