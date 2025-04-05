@@ -83,23 +83,21 @@ get_markdown_anchors() {
             gsub(/[ \t]+$/, "", heading)
 
             # Convert to GitHub-style anchor:
-            heading_lower = tolower(heading)
-            gsub(/[^a-z0-9 -]/, "", heading_lower)
-            gsub(/[ \t]+/, "-", heading_lower)
-            gsub(/--+/, "-", heading_lower)
-            gsub(/-+$/, "", heading_lower)
+            heading = tolower(heading)
+            gsub(/[^a-z0-9 -]/, "", heading)
+            gsub(/[ \t]+/, "-", heading)
+            gsub(/--+/, "-", heading)
+            gsub(/-+$/, "", heading)
 
-            # Determine anchor based on frequency
-            seen_counts[heading_lower]++
-
-            if (seen_counts[heading_lower] == 1) {
-                # First occurrence gets both plain and -1 suffix
-                print heading_lower
-                print heading_lower "-1"
+            # Handle duplicate anchors
+            if (anchor_count[heading] > 0) {
+                print heading "-" anchor_count[heading]
             } else {
-                # Second and later occurrences get incrementing numbers
-                print heading_lower "-" seen_counts[heading_lower]
+                print heading
             }
+
+            # Increment the counter for this anchor
+            anchor_count[heading]++
         }
 
         BEGIN {

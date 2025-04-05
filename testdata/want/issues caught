@@ -4,3 +4,6 @@ Broken links, such as typos are caught [../REDME.md](../REDME.md).
 issues caught.markdown:21:75: broken relative link (anchor not found):
 Similarly non-existent anchors are also caught [README.md#gitlab-actions](../README.md#gitlab-actions)
                                                                           ^
+issues caught.markdown:22:85: broken relative link (anchor not found):
+Non-existent "duplicate" (triplicate?) anchors are also caught [Introduction#why-2](../README.md#why-2)
+                                                                                    ^
