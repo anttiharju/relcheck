@@ -7,7 +7,7 @@ For a reason a relative link has to be an URL instead and someone decided to int
 [../testdata/README.md](../testdata/README.md)
 
 ```md
-<!--[../testdata/README.md](../testdata/README.md) https://anttiharju.dev/check-relative-markdown-links/comment-trick-explained-->
+<!--[../testdata/README.md](../testdata/README.md) https://anttiharju.dev/check-relative-markdown-links/comment-trick-explained -->
 
 MkDocs disallows relative links outside of the docs directory, so here's a GitHub one instead: https://github.com/anttiharju/check-relative-markdown-links/blob/HEAD/testdata/README.md
 ```
@@ -25,7 +25,7 @@ WARNING -  Doc file 'comment-trick-explained.md' contains a link '../testdata/RE
 Aborted with 1 warnings in strict mode!
 ```
 
-<!--[testdata/README.md](../testdata/README.md) https://anttiharju.dev/check-relative-markdown-links/comment-trick-explained-->
+<!--[testdata/README.md](../testdata/README.md) https://anttiharju.dev/check-relative-markdown-links/comment-trick-explained -->
 
 So as a workaround you can link to your GitHub-hosted Markdown file like this: [testdata/README.md](https://github.com/anttiharju/check-relative-markdown-links/blob/HEAD/testdata/README.md) and `mkdocs build --strict` is happy again, yay!
 
@@ -43,5 +43,5 @@ But by opting for the GitHub link you have the static checking offered by `check
 Add the relative link within a comment. This way you still get a tripwire for refactors and MkDocs remains happy.
 
 ```md
-<!--[../testdata/README.md](../testdata/README.md) https://anttiharju.dev/check-relative-markdown-links/comment-trick-explained-->
+<!--[../testdata/README.md](../testdata/README.md) https://anttiharju.dev/check-relative-markdown-links/comment-trick-explained -->
 ```

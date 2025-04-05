@@ -26,7 +26,7 @@ Markdown links within code blocks are ignored so because they would not be click
 We can even setup static checking for relative links that we want to have as URLs for whatever reason. Simply add a comment like
 
 ```md
-<!--[README](./README.md) https://anttiharju.dev/check-relative-markdown-links/comment-trick-explained-->
+<!--[README](./README.md) https://anttiharju.dev/check-relative-markdown-links/comment-trick-explained -->
 ```
 
 alongside the URL to have the tool detect if the file gets moved in the repo. This makes refactoring project structure a lot less error-prone. Read more about this trick at [https://anttiharju.dev/check-relative-markdown-links/comment-trick-explained](../comment-trick-explained.md)
