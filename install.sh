@@ -1,16 +1,28 @@
 #!/bin/sh
 set -eu
 
-# Create the target directory if it doesn't exist
-mkdir -p ~/.anttiharju
+# Use mktemp to create a temporary directory
+tmp=$(mktemp -d)
+# Ensure the temp dir gets cleaned up on exit
+trap 'rm -rf "$tmp"' EXIT
 
-# Download the script to the target directory
-curl -o ~/.anttiharju/check-relative-markdown-links.bash \
-    https://raw.githubusercontent.com/anttiharju/check-relative-markdown-links/6d8b08d943582439a074dc0597c081d48fe09243/check-relative-markdown-links.bash
+# Download the script to the temporary directory
+url="https://raw.githubusercontent.com/anttiharju/check-relative-markdown-links/HEAD/check-relative-markdown-links.bash"
+curl -o "$tmp/check-relative-markdown-links.bash" "$url"
 
 # Make the script executable
-chmod +x ~/.anttiharju/check-relative-markdown-links.bash
+chmod +x "$tmp/check-relative-markdown-links.bash"
 
-echo ""
-echo "Complete installation by running the following command:"
-echo "sudo ln -sf ~/.anttiharju/check-relative-markdown-links.bash /usr/local/bin/check-relative-markdown-links"
+# Store the command parts separately
+src_path="$tmp/check-relative-markdown-links.bash"
+dest_path="/usr/local/bin/check-relative-markdown-links"
+
+# Check if sudo needs a password (exit status 1 means password needed)
+if ! sudo -n true 2>/dev/null; then
+    # Sudo needs password, print the command first
+    echo ""
+    echo "sudo cp -f $src_path $dest_path"
+fi
+
+# Run the command with sudo
+sudo cp -f "$src_path" "$dest_path"
