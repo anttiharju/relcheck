@@ -1,15 +1,15 @@
 #!/bin/sh
 root="$(git rev-parse --show-toplevel)"
 cd "$root" || exit
-mkdir -p "$root/testdata/got"
+mkdir -p "$root/tests/got"
 
-tmp_exit_code="$root/testdata/.exit_code"
+tmp_exit_code="$root/tests/.exit_code"
 echo 0 > "$tmp_exit_code"
 
 (
     cd docs/examples || exit
-    ../../check-relative-markdown-links.bash run --verbose > ../../testdata/got/valid-use
-    cd ../../testdata || exit
+    ../../check-relative-markdown-links.bash run --verbose > ../../tests/got/valid-use
+    cd ../../tests || exit
 
     if [ "$1" = "--regenerate" ]; then
         cp got/valid-use want/valid-use
@@ -22,8 +22,8 @@ echo 0 > "$tmp_exit_code"
 
 (
     cd docs/examples || exit
-    ../../check-relative-markdown-links.bash --verbose "$(git ls-files '*.markdown')" > "../../testdata/got/issues caught"
-    cd ../../testdata || exit
+    ../../check-relative-markdown-links.bash --verbose "$(git ls-files '*.markdown')" > "../../tests/got/issues caught"
+    cd ../../tests || exit
 
     if [ "$1" = "--regenerate" ]; then
         cp "got/issues caught" "want/issues caught"
