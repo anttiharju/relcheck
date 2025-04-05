@@ -24,7 +24,7 @@ Using defaults inside a Git repository:
 check-relative-markdown-links run
 ```
 
-for advanced usage, refer to printed out info from
+for advanced usage, refer to the printed out info from
 
 ```sh
 check-relative-markdown-links
