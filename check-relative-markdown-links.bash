@@ -3,10 +3,6 @@ set -u
 
 # https://github.com/anttiharju/check-relative-markdown-links
 
-# Check for relative Markdown links and verify they exist
-# Usage: ./check-relative-markdown-links [--verbose] [--color=always] file1.md [file2.md] ...
-#   or   ./check-relative-markdown-links [--verbose] [--color=always] run
-
 # Process arguments
 verbose=0
 force_color=0
