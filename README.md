@@ -25,6 +25,8 @@ sudo sh -c "curl -sSfL https://raw.githubusercontent.com/anttiharju/check-relati
 
 ## Usage
 
+### Manual
+
 Using defaults inside a Git repository
 
 ```sh
