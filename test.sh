@@ -1,41 +1,36 @@
 #!/bin/sh
-testdata="$(git rev-parse --show-toplevel)/testdata"
-cd "$testdata" || exit
+root="$(git rev-parse --show-toplevel)"
+cd "$root" || exit
 
-tmp_exit_code="$testdata/.exit_code"
+tmp_exit_code="$root/testdata/.exit_code"
 echo 0 > "$tmp_exit_code"
 
 (
-    cd happy || exit
-    ../../check-relative-markdown-links.bash run --verbose > .got
+    cd docs/examples || exit
+    ../../check-relative-markdown-links.bash run --verbose > ../../testdata/got/valid-use
+    cd ../../testdata || exit
 
     if [ "$1" = "--regenerate" ]; then
-        cp .got want
+        cp got/valid-use want/valid-use
     else
-        if ! diff --color -u want .got; then
+        if ! diff --color -u want/valid-use got/valid-use; then
             echo 1 > "$tmp_exit_code"
         fi
     fi
-
-    cp want .want
 )
 
 (
-    cd negative || exit
-    # This style of usage is simple, but not compliant with shellcheck
-    # That's the reason why the more complicated usage is bundled in with 'run'
-    # shellcheck disable=SC2046
-    ../../check-relative-markdown-links.bash --verbose $(git ls-files '*.markdown') > .got
+    cd docs/examples || exit
+    ../../check-relative-markdown-links.bash --verbose "$(git ls-files '*.markdown')" > "../../testdata/got/issues caught"
+    cd ../../testdata || exit
 
     if [ "$1" = "--regenerate" ]; then
-        cp .got want
+        cp "got/issues caught" "want/issues caught"
     else
-        if ! diff --color -u want .got; then
+        if ! diff --color -u "want/issues caught" "got/issues caught"; then
             echo 1 > "$tmp_exit_code"
         fi
     fi
-
-    cp want .want
 )
 
 exit_code=$(cat "$tmp_exit_code")
