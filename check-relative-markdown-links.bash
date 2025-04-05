@@ -35,7 +35,7 @@ done
 
 if [[ ${#files[@]} -eq 0 ]]; then
     echo "Usage: check-relative-markdown-links [--verbose] [--color=always] <file1.md> [file2.md] ..."
-    echo "   or: check-relative-markdown-links [--verbose] [--color=always] run (to check all *.md files in Git)"
+    echo "   or: check-relative-markdown-links [--verbose] [--color=always] run  (to check all *.md files in Git)"
     exit 1
 fi
 
