@@ -59,17 +59,32 @@ for file in "${files[@]}"; do
     dir=$(dirname "$file")
 
     # Extract all relative links in one pass with awk
-    # This avoids multiple grep/awk/echo calls per link
-    # Now also capturing the column position
+    # Now also skips links inside code blocks
     link_data=$(awk '
-        match($0, /\]\(\.[^)]*\)/) {
+        # Track if we are inside a code block
+        /^```/ {
+            in_code_block = !in_code_block
+        }
+
+        # Only process links when not in a code block
+        !in_code_block && match($0, /\]\(\.[^)]*\)/) {
             link = substr($0, RSTART+2, RLENGTH-3)
             col = RSTART+2  # Column position of the link
             gsub(/#.*$/, "", link)  # Remove anchor part
             if (link != "") {
                 print NR ":" col ":" link
             }
-        }' "$file")
+        }
+
+        # Handle triple backtick code blocks without a language specifier
+        /^``/ && !match($0, /^```[a-z]*/) {
+            in_code_block = !in_code_block
+        }
+
+        BEGIN {
+            in_code_block = 0
+        }
+    ' "$file")
 
     # If no links are found, continue to the next file
     if [[ -z "$link_data" ]]; then
