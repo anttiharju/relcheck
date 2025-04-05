@@ -42,7 +42,7 @@ pre-commit:
 
 ### GitHub Actions
 
-This script has been released as a GitHub Action iny my [actions monorepo](https://github.com/anttiharju/actions/tree/v0/check-relative-markdown-links). Here's a minimal workflow `.github/workflows/validate.yml` example:
+This script has been released as a GitHub Action in my [actions monorepo](https://github.com/anttiharju/actions/tree/v0/check-relative-markdown-links). Here's a minimal workflow `.github/workflows/validate.yml` example:
 
 ```yml
 on:
