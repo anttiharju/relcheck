@@ -29,3 +29,19 @@ for advanced usage, refer to the printed out info from
 ```sh
 check-relative-markdown-links
 ```
+
+### Lefthook
+
+[Lefthook](https://github.com/evilmartians/lefthook) is an awesome Git hooks manager. It enables [shift-left testing](https://en.wikipedia.org/wiki/Shift-left_testing), improving developer experience. `check-relative-markdown-links` was built for usage with Lefthook. Here's a minimal example `lefthook.yml` configuration file:
+
+```yml
+output:
+  - success
+  - failure
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: check-relative-links
+      run: check-relative-links run
+```
