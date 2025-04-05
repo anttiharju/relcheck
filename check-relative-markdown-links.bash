@@ -6,53 +6,51 @@
 # Usage: ./check-relative-markdown-links [--verbose] file1.md [file2.md] ...
 #   or   ./check-relative-markdown-links [--verbose] run
 
-set -eu
-
 # Terminal colors and formatting
-BOLD="\033[1m"
-RED="\033[31m"
-YELLOW="\033[33m"
-GREEN="\033[32m"
-GRAY="\033[90m"
-RESET="\033[0m"
+bold="\033[1m"
+red="\033[31m"
+yellow="\033[33m"
+green="\033[32m"
+gray="\033[90m"
+reset="\033[0m"
 
 # Process arguments
-VERBOSE=0
-FILES=()
+verbose=0
+files=()
 
 while [[ $# -gt 0 ]]; do
     case $1 in
         --verbose)
-            VERBOSE=1
+            verbose=1
             shift
             ;;
         run)
             # If 'run' argument is provided, use git ls-files to find all markdown files
             # Read each line into the array to be shellcheck compliant
             while IFS= read -r line; do
-                FILES+=("$line")
+                files+=("$line")
             done < <(git ls-files '*.md')
             shift
             ;;
         *)
-            FILES+=("$1")
+            files+=("$1")
             shift
             ;;
     esac
 done
 
-if [[ ${#FILES[@]} -eq 0 ]]; then
+if [[ ${#files[@]} -eq 0 ]]; then
     echo "Usage: $0 [--verbose] <file1.md> [file2.md] ..."
     echo "   or: $0 [--verbose] run  (to check all *.md files in Git)"
     exit 1
 fi
 
-EXIT_CODE=0
+exit_code=0
 
-for file in "${FILES[@]}"; do
+for file in "${files[@]}"; do
     if [[ ! -f "$file" ]]; then
-        echo -e "${BOLD}Error:${RESET} ${RED}File not found: ${RESET}$file"
-        EXIT_CODE=1
+        echo -e "${bold}Error:${reset} ${red}File not found: ${reset}$file"
+        exit_code=1
         continue
     fi
 
@@ -74,8 +72,8 @@ for file in "${FILES[@]}"; do
 
     # If no links are found, continue to the next file
     if [[ -z "$link_data" ]]; then
-        if [[ $VERBOSE -eq 1 ]]; then
-            echo -e "${GREEN}✓${RESET} $file: ${GRAY}no relative links${RESET}"
+        if [[ $verbose -eq 1 ]]; then
+            echo -e "${green}✓${reset} $file: ${gray}no relative links${reset}"
         fi
         continue
     fi
@@ -91,12 +89,12 @@ for file in "${FILES[@]}"; do
 
         if [[ ! -e "$full_path" ]]; then
             # Print the file location in bold
-            echo -e "${BOLD}${file}:${line_num}:${col_num}:${RESET} ${RED}broken relative link (file not found):${RESET}"
+            echo -e "${bold}${file}:${line_num}:${col_num}:${reset} ${red}broken relative link (file not found):${reset}"
             # Extract the line content for context
             line_content=$(sed -n "${line_num}p" "$file")
             echo "$line_content"
             # Print line content with yellow indicator pointing to the link position
-            printf "${YELLOW}%${col_num}s${RESET}\n" "^"
+            printf "${yellow}%${col_num}s${reset}\n" "^"
             broken_links_found=1
         else
             ((valid_links_count++))
@@ -104,30 +102,30 @@ for file in "${FILES[@]}"; do
     done < <(echo "$link_data")
 
     # If verbose mode and we have valid links, report them
-    if [[ $VERBOSE -eq 1 && $valid_links_count -gt 0 ]]; then
+    if [[ $verbose -eq 1 && $valid_links_count -gt 0 ]]; then
         if [[ $broken_links_found -eq 0 ]]; then
             if [[ $valid_links_count -eq 1 ]]; then
-                echo -e "${GREEN}✓${RESET} $file: found 1 valid relative link"
+                echo -e "${green}✓${reset} $file: found 1 valid relative link"
             else
-                echo -e "${GREEN}✓${RESET} $file: found $valid_links_count valid relative links"
+                echo -e "${green}✓${reset} $file: found $valid_links_count valid relative links"
             fi
         else
             if [[ $valid_links_count -eq 1 ]]; then
-                echo -e "${GRAY}$file: also found 1 valid relative link${RESET}"
+                echo -e "${gray}$file: also found 1 valid relative link${reset}"
             else
-                echo -e "${GRAY}$file: also found $valid_links_count valid relative links${RESET}"
+                echo -e "${gray}$file: also found $valid_links_count valid relative links${reset}"
             fi
         fi
     fi
 
     if [[ $broken_links_found -eq 1 ]]; then
-        EXIT_CODE=1
+        exit_code=1
     fi
 done
 
 # Show a success message if all links are valid, but only in verbose mode
-if [[ "$EXIT_CODE" -eq 0 && $VERBOSE -eq 1 ]]; then
-    echo -e "${GREEN}✓${RESET} ${BOLD}All relative links are valid!${RESET}"
+if [[ "$exit_code" -eq 0 && $verbose -eq 1 ]]; then
+    echo -e "${green}✓${reset} ${bold}All relative links are valid!${reset}"
 fi
 
-exit "$EXIT_CODE"
+exit "$exit_code"
