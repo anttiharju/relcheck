@@ -64,6 +64,7 @@ output:
 pre-commit:
   parallel: true
   jobs:
+    # Install from https://github.com/anttiharju/check-relative-markdown-links
     - name: check-relative-markdown-links
       run: check-relative-markdown-links run
 ```
