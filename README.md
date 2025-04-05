@@ -34,7 +34,7 @@ dist/brew/README.md:5:19: broken relative link (file not found):
                   ^
 ```
 
-The `file:line:column` link syntax is the same one that golangci-lint uses in its reporting.
+The `file:line:column` link syntax is the same one that golangci-lint uses.
 
 ### Manual
 
