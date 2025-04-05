@@ -57,9 +57,10 @@ pre-commit:
 
 ### GitHub Actions
 
-This script has been released as a GitHub Action in my [actions monorepo](https://github.com/anttiharju/actions/tree/v0/check-relative-markdown-links). Here is a minimal `.github/workflows/validate.yml` example:
+A composite action is available through my [actions monorepo](https://github.com/anttiharju/actions/tree/v0/check-relative-markdown-links). Here is a minimal `.github/workflows/build.yml` example:
 
 ```yml
+name: Build
 on:
   push:
     branches:
@@ -68,6 +69,7 @@ on:
 
 jobs:
   validate:
+    name: Validate
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
