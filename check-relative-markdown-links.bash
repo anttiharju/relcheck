@@ -4,8 +4,8 @@ set -u
 # https://github.com/anttiharju/check-relative-markdown-links
 
 # Check for relative Markdown links and verify they exist
-# Usage: check-relative-markdown-links [--verbose] file1.md [file2.md] ...
-#   or   check-relative-markdown-links [--verbose] run
+# Usage: ./check-relative-markdown-links [--verbose] file1.md [file2.md] ...
+#   or   ./check-relative-markdown-links [--verbose] run
 
 # Terminal colors and formatting
 # Check if stdout is a terminal
@@ -63,6 +63,41 @@ urldecode() {
     printf '%b' "${url_encoded//%/\\x}"
 }
 
+# Function to extract all headers from a markdown file and convert to anchors
+get_markdown_anchors() {
+    local file=$1
+    awk '
+        # Skip code blocks
+        /^```/ {
+            in_code_block = !in_code_block
+            next
+        }
+        in_code_block { next }
+
+        # Match headings
+        /^#{1,6} / {
+            # Extract the heading text without the leading #s
+            heading = $0
+            gsub(/^#+[ \t]+/, "", heading)
+            # Remove trailing spaces
+            gsub(/[ \t]+$/, "", heading)
+
+            # Convert to GitHub-style anchor:
+            heading = tolower(heading)
+            gsub(/[^a-z0-9 -]/, "", heading)
+            gsub(/[ \t]+/, "-", heading)
+            gsub(/--+/, "-", heading)
+            gsub(/-+$/, "", heading)
+
+            print heading
+        }
+
+        BEGIN {
+            in_code_block = 0
+        }
+    ' "$file"
+}
+
 exit_code=0
 
 for file in "${files[@]}"; do
@@ -76,7 +111,6 @@ for file in "${files[@]}"; do
     dir=$(dirname "$file")
 
     # Extract all relative links in one pass with awk
-    # Now also skips links inside code blocks
     link_data=$(awk '
         # Track if we are inside a code block
         /^```/ {
@@ -87,10 +121,9 @@ for file in "${files[@]}"; do
         !in_code_block && match($0, /\]\(\.[^)]*\)/) {
             link = substr($0, RSTART+2, RLENGTH-3)
             col = RSTART+2  # Column position of the link
-            gsub(/#.*$/, "", link)  # Remove anchor part
-            if (link != "") {
-                print NR ":" col ":" link
-            }
+
+            # Keep the original link with anchor for display
+            print NR ":" col ":" link
         }
 
         # Handle triple backtick code blocks without a language specifier
@@ -116,9 +149,18 @@ for file in "${files[@]}"; do
     valid_links_count=0
 
     # Process each link
-    while IFS=: read -r line_num col_num link; do
-        # URL-decode the link to handle spaces and other encoded characters
-        decoded_link=$(urldecode "$link")
+    while IFS=: read -r line_num col_num original_link; do
+        # Split the link into path and anchor parts
+        if [[ "$original_link" == *"#"* ]]; then
+            link_path="${original_link%%#*}"
+            link_anchor="${original_link#*#}"
+        else
+            link_path="$original_link"
+            link_anchor=""
+        fi
+
+        # URL-decode the link path to handle spaces and other encoded characters
+        decoded_link=$(urldecode "$link_path")
 
         # Construct the full path relative to the file's location
         full_path="$dir/$decoded_link"
@@ -132,6 +174,18 @@ for file in "${files[@]}"; do
             # Print line content with yellow indicator pointing to the link position
             printf "${yellow}%${col_num}s${reset}\n" "^"
             broken_links_found=1
+        elif [[ -n "$link_anchor" ]]; then
+            # If an anchor exists, check if it's valid
+            target_anchors=$(get_markdown_anchors "$full_path")
+            if ! echo "$target_anchors" | grep -Fxq "$link_anchor"; then
+                echo -e "${bold}${file}:${line_num}:${col_num}:${reset} ${red}broken relative link (anchor not found):${reset}"
+                line_content=$(sed -n "${line_num}p" "$file")
+                echo "$line_content"
+                printf "${yellow}%${col_num}s${reset}\n" "^"
+                broken_links_found=1
+            else
+                ((valid_links_count++))
+            fi
         else
             ((valid_links_count++))
         fi
