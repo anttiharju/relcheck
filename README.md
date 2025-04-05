@@ -34,6 +34,6 @@ output:
 pre-commit:
   parallel: true
   jobs:
-    - name: check-relative-links
-      run: check-relative-links run
+    - name: check-relative-markdown-links
+      run: check-relative-markdown-links run
 ```
