@@ -5,7 +5,7 @@
 ## Why
 
 1. Documentation is useful; documentation with broken relative links is less so.
-2. `mkdocs build --strict` is too strict, can't lint files outside of `docs/` directory.
+2. `mkdocs build --strict` is too strict, can't check files outside of `docs/` directory.
 3. `markdown-link-check` takes roughly 10 seconds to execute. This (even in large repos) typically runs in milliseconds:
 
    ```sh
