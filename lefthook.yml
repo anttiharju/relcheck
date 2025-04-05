@@ -1,0 +1,27 @@
+output:
+  - success
+  - failure
+
+# Match to validate.yml
+pre-commit:
+  parallel: true
+  jobs:
+    - name: action-validator
+      glob: "{.github/workflows/*.yml,*/action.yml}"
+      run: action-validator --verbose $(git ls-files '.github/workflows/*.yml' '*/action.yml')
+
+    - name: actionlint
+      glob: ".github/workflows/*.yml"
+      run: actionlint -color
+
+    - name: ShellCheck
+      glob: "*{.sh,.bash}"
+      run: shellcheck --color=always --source-path=SCRIPTDIR $(git ls-files '*.sh' '*.bash')
+
+    - name: Prettier
+      glob: "*{.md,.yml}"
+      run: prettier --write {staged_files}
+      stage_fixed: true
+
+    - name: EditorConfig-Checker
+      run: editorconfig-checker {staged_files}

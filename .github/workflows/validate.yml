@@ -1,0 +1,32 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_call:
+
+jobs:
+  check-relative-markdown-links:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: action-validator
+        uses: anttiharju/actions/action-validator@v0
+
+      - if: always()
+        name: actionlint
+        uses: anttiharju/actions/actionlint@v0
+
+      - if: always()
+        name: ShellCheck
+        uses: anttiharju/actions/shellcheck@v0
+
+      - if: always()
+        name: Prettier
+        uses: anttiharju/actions/prettier@v0
+
+      - if: always()
+        name: EditorConfig-Checker
+        uses: anttiharju/actions/editorconfig-checker@v0
