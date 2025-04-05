@@ -5,17 +5,17 @@
 ## Why
 
 1. Documentation is useful; documentation with broken relative links is less so.
-2. `mkdocs build --strict` is too strict, can't check files outside of `docs/` directory.
+2. `mkdocs build --strict` is too strict, can not check files outside of `docs/` directory.
 3. `markdown-link-check` takes roughly 10 seconds to execute. This (even in large repos) typically runs in milliseconds:
 
-   ```sh
-   time ./check-relative-markdown-links.bash run
+```sh
+time ./check-relative-markdown-links.bash run
 
-   ________________________________________________________
-   Executed in   32.02 millis    fish           external
-     usr time   11.29 millis    0.23 millis   11.05 millis
-     sys time   16.60 millis    1.87 millis   14.73 millis
-   ```
+________________________________________________________
+Executed in   32.02 millis    fish           external
+  usr time   11.29 millis    0.23 millis   11.05 millis
+  sys time   16.60 millis    1.87 millis   14.73 millis
+```
 
 ## Installation
 
@@ -39,7 +39,7 @@ check-relative-markdown-links
 
 ### Lefthook
 
-[Lefthook](https://github.com/evilmartians/lefthook) is an awesome Git hooks manager. It enables [shift-left testing](https://en.wikipedia.org/wiki/Shift-left_testing) which improves developer experience. `check-relative-markdown-links` was built for usage with Lefthook. Here's a minimal example `lefthook.yml` configuration file:
+[Lefthook](https://github.com/evilmartians/lefthook) is an awesome Git hooks manager. It enables [shift-left testing](https://en.wikipedia.org/wiki/Shift-left_testing) which improves developer experience. `check-relative-markdown-links` was built for usage with Lefthook. Here is a minimal `lefthook.yml` example:
 
 ```yml
 output:
@@ -55,7 +55,7 @@ pre-commit:
 
 ### GitHub Actions
 
-This script has been released as a GitHub Action in my [actions monorepo](https://github.com/anttiharju/actions/tree/v0/check-relative-markdown-links). Here's a minimal workflow `.github/workflows/validate.yml` example:
+This script has been released as a GitHub Action in my [actions monorepo](https://github.com/anttiharju/actions/tree/v0/check-relative-markdown-links). Here is a minimal `.github/workflows/validate.yml` example:
 
 ```yml
 on:
