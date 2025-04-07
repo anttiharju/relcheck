@@ -9,11 +9,10 @@
 3. Other existing tools I found were too slow, taking up to 10 seconds. This tool typically runs in milliseconds:
 
 ```sh
-$ time check-relative-markdown-links run
-________________________________________________________
-Executed in   32.02 millis    fish           external
-  usr time   11.29 millis    0.23 millis   11.05 millis
-  sys time   16.60 millis    1.87 millis   14.73 millis
+$ hyperfine "check-relative-markdown-links run"
+Benchmark 1: check-relative-markdown-links run
+  Time (mean ± σ):      32.2 ms ±   0.2 ms    [User: 11.7 ms, System: 15.2 ms]
+  Range (min … max):    31.3 ms …  32.8 ms    84 runs
 ```
 
 ## Installation
