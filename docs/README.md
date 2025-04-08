@@ -21,6 +21,10 @@ Benchmark 1: check-relative-markdown-links run
 sudo sh -c "curl -sSfL https://raw.githubusercontent.com/anttiharju/check-relative-markdown-links/HEAD/check-relative-markdown-links.bash -o /usr/local/bin/check-relative-markdown-links && chmod +x /usr/local/bin/check-relative-markdown-links"
 ```
 
+Note: the tool depends on awk, and not all versions of awk are apparently compatible. Install `gawk` in case you're having issues.
+
+Eventually there will be a rewrite to produce a static binary without this issue.
+
 ## Usage
 
 In integrated terminals of editors such as VS Code, the reported broken links such as `dist/brew/README.md:5:19` are clickable when holding ctrl/cmd to bring your cursor right to where the ^ indicator points:
