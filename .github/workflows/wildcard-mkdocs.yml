@@ -4,6 +4,7 @@ on:
       - wildcard
     paths:
       - "docs/**/*"
+      - "tests/**/*"
       - "mkdocs.yml"
 
 jobs:
