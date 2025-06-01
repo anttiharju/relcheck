@@ -18,27 +18,18 @@ Benchmark 1: relcheck all
 ## Installation
 
 ```sh
-sudo sh -c "curl -sSfL https://raw.githubusercontent.com/anttiharju/relcheck/HEAD/relcheck.bash -o /usr/local/bin/relcheck && chmod +x /usr/local/bin/relcheck"
+brew install anttiharju/tap/relcheck
 ```
 
-Note: the tool depends on awk, and not all versions of awk are apparently compatible. Install `gawk` in case you're having issues.
+Or download a binary from a GitHub release.
 
-Eventually there will be a rewrite to produce a static binary without this issue.
-
-## Usage
-
-In integrated terminals of editors such as VS Code, the reported broken links such as `dist/brew/README.md:5:19` are clickable when holding ctrl/cmd to bring your cursor right to where the ^ indicator points:
+### Updating
 
 ```sh
-$ relcheck all
-dist/brew/README.md:5:19: broken relative link (file not found):
-- [`values.bash`](./values.sh) is required by the [render-template](https://github.com/anttiharju/actions/tree/v0/render-template) action.
-                  ^
+brew update && brew upgrade relcheck
 ```
 
-The `file:line:column` link syntax is the same one that golangci-lint uses.
-
-### Manual
+## Usage
 
 Using defaults inside a Git repository
 
@@ -51,6 +42,23 @@ for advanced usage, refer to the printed out info from
 ```sh
 relcheck
 ```
+
+Although the recommendation is to setup a integration via Lefthook or GitHub Actions instead of manual use.
+
+## Integrations
+
+### VS Code
+
+The reported broken links such as `dist/brew/README.md:5:19` are clickable in the intergrated terminal when holding ctrl/cmd. It will bring you right to where the ^ indicator points:
+
+```sh
+$ relcheck all
+dist/brew/README.md:5:19: broken relative link (file not found):
+- [`values.bash`](./values.sh) is required by the [render-template](https://github.com/anttiharju/actions/tree/v0/render-template) action.
+                  ^
+```
+
+The `file:line:column` link syntax is the same one that golangci-lint uses.
 
 ### Git pre-commit hook (via Lefthook)
 
@@ -90,7 +98,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: relcheck
-        uses: anttiharju/actions/relcheck@fa0a8b6cd47e30e4abf7ce4fbbd8ec0f377405db
+        uses: anttiharju/actions/relcheck@v0
 ```
 
 ## Stargazers over time
