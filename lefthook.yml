@@ -16,13 +16,12 @@ pre-commit:
     - name: EditorConfig-Checker
       run: editorconfig-checker {staged_files}
 
-    - name: go build
-      glob: "{dist/wrap/*,internal/*,go.mod,main.go}"
-      run: go build
-
-    - name: relcheck
-      run: ./relcheck all
-      depends: go build
+    - name: Go build and relcheck
+      group:
+        piped: true
+        jobs:
+          - run: go build
+          - run: ./relcheck all
 
     - name: go test
       glob: "{dist/wrap/*,internal/*,go.mod,main.go}"
