@@ -14,8 +14,7 @@ import (
 func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode.Exitcode {
 	reporter := reporter.New(verbose, forceColors)
 
-	// Default exit code is success
-	exitCode := exitcode.Success
+	exitCode := exitcode.Success // default
 
 	for _, filepath := range files {
 		// Check if the file exists
