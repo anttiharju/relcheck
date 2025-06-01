@@ -8,7 +8,6 @@ import (
 	"github.com/anttiharju/relcheck/internal/markdown/link"
 )
 
-// Reporter manages formatting and display of link check results
 type Reporter struct {
 	Colors     color.Palette
 	Verbose    bool
@@ -54,30 +53,28 @@ func (r *Reporter) BrokenLink(filename string, brokenLink link.Link, errorType s
 	r.ErrorCount++
 }
 
-// ReportValidLinks reports the number of valid links found
-func (r *Reporter) ReportValidLinks(filename string, count int, hasBrokenLinks bool) {
+func (r *Reporter) ValidLinks(filename string, count int, hasBrokenLinks bool) {
 	if !r.Verbose || count == 0 {
 		return
 	}
 
-	// Format the count text based on singular/plural
+	// Singular/plural formatting
 	countText := "1 valid relative link"
 	if count > 1 {
 		countText = fmt.Sprintf("%d valid relative links", count)
 	}
 
-	// Format the output based on whether broken links were found
+	// Print with "also has" if there were broken links
 	if !hasBrokenLinks {
-		fmt.Printf("%s✓%s %s: found %s\n",
+		fmt.Printf("%s✓%s %s: %s\n",
 			r.Colors.Green, r.Colors.Reset, filename, countText)
 	} else {
-		fmt.Printf("%s%s: also found %s%s\n",
+		fmt.Printf("%s%s: also has %s%s\n",
 			r.Colors.Gray, filename, countText, r.Colors.Reset)
 	}
 }
 
-// ReportSuccess reports total success when all links are valid
-func (r *Reporter) ReportSuccess() {
+func (r *Reporter) Success() {
 	if r.Verbose && r.ErrorCount == 0 {
 		fmt.Printf("%s✓%s %sAll relative links are valid!%s\n",
 			r.Colors.Green, r.Colors.Reset, r.Colors.Bold, r.Colors.Reset)

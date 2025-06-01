@@ -99,7 +99,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 		}
 
 		// Report valid links if any
-		reporter.ReportValidLinks(file, validLinksCount, brokenLinksFound)
+		reporter.ValidLinks(file, validLinksCount, brokenLinksFound)
 
 		// Update exit code if broken links were found
 		if brokenLinksFound {
@@ -108,7 +108,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 	}
 
 	// Report success if all links are valid
-	reporter.ReportSuccess()
+	reporter.Success()
 
 	return exitCode
 }
