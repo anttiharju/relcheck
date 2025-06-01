@@ -2,6 +2,7 @@ package anchor
 
 import (
 	"regexp"
+	"slices"
 	"strings"
 )
 
@@ -25,13 +26,6 @@ func GenerateAnchor(heading string) string {
 	return anchor
 }
 
-// Contains checks if a slice contains a string
-func Contains(slice []string, item string) bool {
-	for _, s := range slice {
-		if s == item {
-			return true
-		}
-	}
-
-	return false
+func Exists(source string, target []string) bool {
+	return slices.Contains(target, source)
 }
