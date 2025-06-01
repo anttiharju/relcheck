@@ -2,8 +2,6 @@ package cli
 
 import (
 	"os"
-
-	"github.com/anttiharju/relcheck/pkg/colors"
 )
 
 // ColorScheme holds ANSI color codes
@@ -16,16 +14,25 @@ type ColorScheme struct {
 	Reset  string
 }
 
+const (
+	bold   = "\033[1m"
+	red    = "\033[31m"
+	yellow = "\033[33m"
+	green  = "\033[32m"
+	gray   = "\033[90m"
+	reset  = "\033[0m"
+)
+
 // GetColorScheme returns color scheme based on terminal capabilities
 func GetColorScheme(useColors bool) ColorScheme {
 	if useColors {
 		return ColorScheme{
-			Bold:   colors.Bold,
-			Red:    colors.Red,
-			Yellow: colors.Yellow,
-			Green:  colors.Green,
-			Gray:   colors.Gray,
-			Reset:  colors.Reset,
+			Bold:   bold,
+			Red:    red,
+			Yellow: yellow,
+			Green:  green,
+			Gray:   gray,
+			Reset:  reset,
 		}
 	}
 
