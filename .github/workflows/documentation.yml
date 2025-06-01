@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Generate deploy token
         id: deploy
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v0
         with:
           app-id: ${{ secrets.ANTTIHARJU_BOT_ID }}
           private-key: ${{ secrets.ANTTIHARJU_BOT_PRIVATE_KEY }}
@@ -25,6 +25,6 @@ jobs:
         with:
           token: ${{ steps.deploy.outputs.token }}
       - name: Deploy to GitHub Pages
-        uses: anttiharju/actions/mkdocs-gh-deploy@v1
+        uses: anttiharju/actions/mkdocs-gh-deploy@v0
         with:
           committer: "anttiharju[bot]"
