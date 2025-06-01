@@ -45,10 +45,13 @@ func main() {
 	colors := getColorScheme(useColors)
 
 	exitCode := 0
+
 	for _, file := range opts.files {
 		if _, err := os.Stat(file); os.IsNotExist(err) {
 			fmt.Printf("%sError:%s %sFile not found: %s%s\n", colors.bold, colors.reset, colors.red, colors.reset, file)
+
 			exitCode = 1
+
 			continue
 		}
 
@@ -59,7 +62,9 @@ func main() {
 		links, err := extractRelativeLinks(file)
 		if err != nil {
 			fmt.Printf("%sError:%s Could not process file %s: %v\n", colors.bold, colors.reset, file, err)
+
 			exitCode = 1
+
 			continue
 		}
 
@@ -68,6 +73,7 @@ func main() {
 			if opts.verbose {
 				fmt.Printf("%s✓%s %s: %sno relative links%s\n", colors.green, colors.reset, file, colors.gray, colors.reset)
 			}
+
 			continue
 		}
 
@@ -82,6 +88,7 @@ func main() {
 			decodedLink, err := url.QueryUnescape(linkPath)
 			if err != nil {
 				fmt.Printf("%sError:%s Could not decode URL %s: %v\n", colors.bold, colors.reset, linkPath, err)
+
 				continue
 			}
 
@@ -100,21 +107,25 @@ func main() {
 
 				// Print line content with yellow indicator pointing to the link position
 				fmt.Printf("%s%s%s\n", colors.yellow, strings.Repeat(" ", link.col-1)+"^", colors.reset)
+
 				brokenLinksFound = true
 			} else if linkAnchor != "" {
 				// If an anchor exists, check if it's valid
 				anchors, err := getMarkdownAnchors(fullPath)
 				if err != nil {
 					fmt.Printf("%sError:%s Could not extract anchors from %s: %v\n", colors.bold, colors.reset, fullPath, err)
+
 					continue
 				}
 
 				if !contains(anchors, linkAnchor) {
 					fmt.Printf("%s%s:%d:%d:%s %sbroken relative link (anchor not found):%s\n",
 						colors.bold, file, link.line, link.col, colors.reset, colors.red, colors.reset)
+
 					lineContent, _ := getLineContent(file, link.line)
 					fmt.Println(lineContent)
 					fmt.Printf("%s%s%s\n", colors.yellow, strings.Repeat(" ", link.col-1)+"^", colors.reset)
+
 					brokenLinksFound = true
 				} else {
 					validLinksCount++
@@ -169,7 +180,7 @@ func parseArgs(args []string) options {
 		files:      []string{},
 	}
 
-	for i := 0; i < len(args); i++ {
+	for i := range args {
 		arg := args[i]
 		switch arg {
 		case "--verbose":
@@ -179,6 +190,7 @@ func parseArgs(args []string) options {
 		case "run":
 			// Use git ls-files to find all markdown files
 			cmd := exec.Command("git", "ls-files", "*.md")
+
 			var out bytes.Buffer
 			cmd.Stdout = &out
 
@@ -208,6 +220,7 @@ func extractRelativeLinks(filename string) ([]Link, error) {
 	defer file.Close()
 
 	var links []Link
+
 	scanner := bufio.NewScanner(file)
 	inCodeBlock := false
 	lineNumber := 0
@@ -219,6 +232,7 @@ func extractRelativeLinks(filename string) ([]Link, error) {
 		// Check for code block
 		if strings.HasPrefix(line, "```") {
 			inCodeBlock = !inCodeBlock
+
 			continue
 		}
 
@@ -257,6 +271,7 @@ func splitLinkAndAnchor(link string) (string, string) {
 	if len(parts) == 2 {
 		return parts[0], parts[1]
 	}
+
 	return link, ""
 }
 
@@ -269,6 +284,7 @@ func getMarkdownAnchors(filename string) ([]string, error) {
 	defer file.Close()
 
 	var anchors []string
+
 	scanner := bufio.NewScanner(file)
 	inCodeBlock := false
 	anchorCount := make(map[string]int)
@@ -279,6 +295,7 @@ func getMarkdownAnchors(filename string) ([]string, error) {
 		// Check for code block
 		if strings.HasPrefix(line, "```") {
 			inCodeBlock = !inCodeBlock
+
 			continue
 		}
 
@@ -360,6 +377,7 @@ func getColorScheme(useColors bool) ColorScheme {
 	if useColors {
 		return ColorScheme{bold, red, yellow, green, gray, reset}
 	}
+
 	return ColorScheme{"", "", "", "", "", ""}
 }
 
@@ -369,6 +387,7 @@ func isTerminal() bool {
 	if err != nil {
 		return false
 	}
+
 	return (fileInfo.Mode() & os.ModeCharDevice) != 0
 }
 
@@ -379,5 +398,6 @@ func contains(slice []string, item string) bool {
 			return true
 		}
 	}
+
 	return false
 }
