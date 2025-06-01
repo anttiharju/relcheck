@@ -62,7 +62,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 			// Check if target file exists
 			if !fileutils.FileExists(fullpath) {
 				lineContent, _ := fileutils.GetLineContent(filepath, link.Line)
-				report.BrokenLink(filepath, link, "file not found", lineContent)
+				report.BrokenLink(filepath, link, "target not found", lineContent)
 
 				brokenLinksFound = true
 

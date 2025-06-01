@@ -1,4 +1,4 @@
-[1missues caught.markdown:17:54:[0m [31mbroken relative link (file not found):[0m
+[1missues caught.markdown:17:54:[0m [31mbroken relative link (target not found):[0m
 Broken links, such as typos are caught [../REDME.md](../REDME.md).
 [33m                                                     ^[0m
 [1missues caught.markdown:21:78:[0m [31mbroken relative link (anchor not found):[0m
