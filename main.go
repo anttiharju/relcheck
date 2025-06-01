@@ -218,7 +218,7 @@ var relativeLinkPattern = regexp.MustCompile(`\]\(\.[^)]*\)`)
 func extractRelativeLinks(filename string) ([]Link, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to open file %s: %w", filename, err)
 	}
 	defer file.Close()
 
@@ -262,7 +262,7 @@ func extractRelativeLinks(filename string) ([]Link, error) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error scanning file: %w", err)
 	}
 
 	return links, nil
@@ -282,7 +282,7 @@ func splitLinkAndAnchor(link string) (string, string) {
 func getMarkdownAnchors(filename string) ([]string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to open file %s: %w", filename, err)
 	}
 	defer file.Close()
 
@@ -343,7 +343,7 @@ func getMarkdownAnchors(filename string) ([]string, error) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error scanning file: %w", err)
 	}
 
 	return anchors, nil
@@ -353,7 +353,7 @@ func getMarkdownAnchors(filename string) ([]string, error) {
 func getLineContent(filename string, lineNumber int) (string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to open file %s: %w", filename, err)
 	}
 	defer file.Close()
 
