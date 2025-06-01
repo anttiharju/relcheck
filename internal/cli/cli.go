@@ -1,14 +1,12 @@
 package cli
 
 import (
-	"bufio"
-	"bytes"
 	"context"
-	"fmt"
-	"os/exec"
 
 	"github.com/anttiharju/relcheck/internal/exitcode"
+	"github.com/anttiharju/relcheck/internal/git"
 	"github.com/anttiharju/relcheck/internal/program"
+	"github.com/anttiharju/relcheck/internal/usage"
 	"github.com/anttiharju/relcheck/internal/version"
 )
 
@@ -30,11 +28,11 @@ func Run(_ context.Context, args []string) exitcode.Exitcode {
 	cmd, opts, inputFiles := ParseArgs(args)
 	switch cmd {
 	case Usage:
-		return showUsage()
+		return usage.Print()
 	case ShowVersion:
 		return version.Print()
 	case RunOnAllMarkdown:
-		return program.Start(opts.Verbose, opts.ForceColor, findAllMarkdownFiles())
+		return program.Start(opts.Verbose, opts.ForceColor, git.ListMarkdownFiles())
 	case RunOnInputFiles:
 		fallthrough
 	default:
@@ -73,30 +71,4 @@ func ParseArgs(args []string) (Command, Options, []string) {
 	}
 
 	return command, options, inputFiles
-}
-
-// findAllMarkdownFiles uses git ls-files to find all markdown files
-func findAllMarkdownFiles() []string {
-	cmd := exec.Command("git", "ls-files", "*.md")
-	files := []string{}
-
-	var out bytes.Buffer
-	cmd.Stdout = &out
-
-	if err := cmd.Run(); err == nil {
-		scanner := bufio.NewScanner(&out)
-		for scanner.Scan() {
-			files = append(files, scanner.Text())
-		}
-	}
-
-	return files
-}
-
-func showUsage() exitcode.Exitcode {
-	fmt.Println("Usage: relcheck [--verbose] [--color=always] <file1.md> [file2.md] ...")
-	fmt.Println("   or: relcheck [--verbose] [--color=always] run  (to check all *.md files in Git)")
-	fmt.Println("   or: relcheck version  (to show version information)")
-
-	return exitcode.UsageError
 }
