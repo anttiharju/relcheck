@@ -29,6 +29,7 @@ type options struct {
 	files      []string
 }
 
+//nolint:gocognit,cyclop,funlen
 func main() {
 	// Parse command line arguments manually to match the bash script behavior exactly
 	opts := parseArgs(os.Args[1:])
@@ -96,6 +97,7 @@ func main() {
 			fullPath := filepath.Join(dir, decodedLink)
 
 			// Use full file path for error messages to match bash script output
+			//nolint:nestif
 			if _, err := os.Stat(fullPath); os.IsNotExist(err) {
 				// Print the file location in bold - match exact format from the bash script
 				fmt.Printf("%s%s:%d:%d:%s %sbroken relative link (file not found):%s\n",
@@ -136,6 +138,7 @@ func main() {
 		}
 
 		// If verbose mode and we have valid links, report them
+		//nolint:nestif
 		if opts.verbose && validLinksCount > 0 {
 			if !brokenLinksFound {
 				if validLinksCount == 1 {
