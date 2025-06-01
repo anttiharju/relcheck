@@ -4,16 +4,6 @@ import (
 	"os"
 )
 
-// ColorScheme holds ANSI color codes
-type ColorScheme struct {
-	Bold   string
-	Red    string
-	Yellow string
-	Green  string
-	Gray   string
-	Reset  string
-}
-
 const (
 	bold   = "\033[1m"
 	red    = "\033[31m"
@@ -22,6 +12,15 @@ const (
 	gray   = "\033[90m"
 	reset  = "\033[0m"
 )
+
+type ColorScheme struct {
+	Bold   string
+	Red    string
+	Yellow string
+	Green  string
+	Gray   string
+	Reset  string
+}
 
 func GetColorScheme(forceColor bool) ColorScheme {
 	useColors := isTerminal() || forceColor
