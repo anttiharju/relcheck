@@ -3,9 +3,9 @@ package cli
 import (
 	"context"
 
+	"github.com/anttiharju/relcheck/internal/check"
 	"github.com/anttiharju/relcheck/internal/exitcode"
 	"github.com/anttiharju/relcheck/internal/git"
-	"github.com/anttiharju/relcheck/internal/program"
 	"github.com/anttiharju/relcheck/internal/usage"
 	"github.com/anttiharju/relcheck/internal/version"
 )
@@ -32,11 +32,11 @@ func Run(_ context.Context, args []string) exitcode.Exitcode {
 	case ShowVersion:
 		return version.Print()
 	case RunOnAllMarkdown:
-		return program.Start(opts.Verbose, opts.ForceColor, git.ListMarkdownFiles())
+		return check.RelativeLinksAndAnchors(opts.Verbose, opts.ForceColor, git.ListMarkdownFiles())
 	case RunOnInputFiles:
 		fallthrough
 	default:
-		return program.Start(opts.Verbose, opts.ForceColor, inputFiles)
+		return check.RelativeLinksAndAnchors(opts.Verbose, opts.ForceColor, inputFiles)
 	}
 }
 

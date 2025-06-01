@@ -1,4 +1,4 @@
-package program
+package check
 
 import (
 	"bufio"
@@ -21,7 +21,7 @@ type Link struct {
 }
 
 //nolint:gocognit,cyclop,funlen
-func Start(verbose, forceColor bool, files []string) exitcode.Exitcode {
+func RelativeLinksAndAnchors(verbose, forceColor bool, files []string) exitcode.Exitcode {
 	// Determine terminal color
 	color := colors.GetColorScheme(forceColor)
 
