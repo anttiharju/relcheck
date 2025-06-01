@@ -86,8 +86,7 @@ func isLinkValid(filepath string, link link.Link, report *reporter.Reporter) boo
 
 	// If target does not exist, report it
 	if !fileutils.FileExists(fullpath) {
-		lineContent, _ := fileutils.GetLineContent(filepath, link.Line)
-		report.BrokenLink(filepath, link, "target not found", lineContent)
+		report.BrokenLink(filepath, link, "target not found", link.LineContent)
 
 		return false
 	}
@@ -109,8 +108,7 @@ func isAnchorValid(filepath, targetpath string, link link.Link, report *reporter
 	}
 
 	if !anchor.Exists(link.Anchor, targetFile.Anchors) {
-		lineContent, _ := fileutils.GetLineContent(filepath, link.Line)
-		report.BrokenLink(filepath, link, "heading not found", lineContent)
+		report.BrokenLink(filepath, link, "heading not found", link.LineContent)
 
 		return false
 	}

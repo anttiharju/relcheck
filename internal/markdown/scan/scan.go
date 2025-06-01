@@ -76,11 +76,12 @@ func File(filepath string) (Result, error) {
 			path, anchorText := link.SplitLinkAndAnchor(urlText)
 
 			links = append(links, link.Link{
-				URL:    urlText,
-				Line:   lineNumber,
-				Column: colPosition + 1, // +1 because columns start at 1
-				Path:   path,
-				Anchor: anchorText,
+				URL:         urlText,
+				Line:        lineNumber,
+				Column:      colPosition + 1, // +1 because columns start at 1
+				Path:        path,
+				Anchor:      anchorText,
+				LineContent: line,
 			})
 		}
 
