@@ -7,14 +7,12 @@ import (
 	"path/filepath"
 )
 
-// FileExists checks if a file exists
 func FileExists(path string) bool {
 	_, err := os.Stat(path)
 
 	return !os.IsNotExist(err)
 }
 
-// GetLineContent retrieves a specific line from a file
 func GetLineContent(filename string, lineNumber int) (string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
@@ -35,8 +33,7 @@ func GetLineContent(filename string, lineNumber int) (string, error) {
 	return "", fmt.Errorf("line %d not found", lineNumber)
 }
 
-// ResolveRelativePath resolves a relative path against a base file
-func ResolveRelativePath(baseFile, relativePath string) string {
+func ResolvePath(baseFile, relativePath string) string {
 	dir := filepath.Dir(baseFile)
 
 	return filepath.Join(dir, relativePath)

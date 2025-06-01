@@ -82,7 +82,7 @@ func isLinkValid(filepath string, link link.Link, report *reporter.Reporter) boo
 		return false
 	}
 
-	fullpath := fileutils.ResolveRelativePath(filepath, decodedPath)
+	fullpath := fileutils.ResolvePath(filepath, decodedPath)
 
 	// If target does not exist, report it
 	if !fileutils.FileExists(fullpath) {
