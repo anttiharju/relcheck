@@ -1,4 +1,4 @@
-package display
+package reporter
 
 import (
 	"fmt"
@@ -15,8 +15,7 @@ type Reporter struct {
 	ErrorCount int
 }
 
-// NewReporter creates a new reporter with the given settings
-func NewReporter(colors color.Palette, verbose bool) *Reporter {
+func New(colors color.Palette, verbose bool) *Reporter {
 	return &Reporter{
 		Colors:  colors,
 		Verbose: verbose,
