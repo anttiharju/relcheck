@@ -1,107 +1,102 @@
 # Introduction
 
-[![Build](https://github.com/anttiharju/vmatch/actions/workflows/build.yml/badge.svg)](https://github.com/anttiharju/vmatch/actions/workflows/build.yml)
-
-`vmatch` is a **fully** automated version manager for Go and golangci-lint:
-
-1. Developer using vmatch never has to manually update their environment to match their project.
-2. Versions specified in `go.mod` and `.golangci-version` are downloaded and used automatically, on-demand.
-3. This allows projects to 'rust'; a project with `vmatch`-supported structure will keep working as it was when last touched. No more "can't install the right version of Go with brew".
-
-## FAQ
-
-**Q:** What about [https://go.dev/blog/toolchain](https://go.dev/blog/toolchain)?
-
-**A:** It is about forward-compatibility, `vmatch` installs the Go version specified in your project. I've found Go's promises of backward-compatibility to be squishy in practice, `brew install go` has not been sufficient for some project setups.
-
-**Q:** What about `go run`? (Go 1.24 and after `go run` calls are cached)
-
-**A:** It is probably the easy thing to introduce to your team and is a fine addition to Go.
+[![Tests](https://github.com/anttiharju/relcheck/actions/workflows/tests.yml/badge.svg)](https://github.com/anttiharju/relcheck/actions/workflows/tests.yml) [![Linters](https://github.com/anttiharju/relcheck/actions/workflows/linters.yml/badge.svg)](https://github.com/anttiharju/relcheck/actions/workflows/linters.yml) [![Docs build](https://github.com/anttiharju/relcheck/actions/workflows/docs-build.yml/badge.svg)](https://github.com/anttiharju/relcheck/actions/workflows/docs-build.yml)
 
 ## Why
 
-Collaborators using different versions of `golangci-lint` may get different output, leading to confusion and wasted time in code reviews. Ideally, a team would agree to use `vmatch` as their source for `go` and `golangci-lint`. That way, they would always have the right version installed.
+1. Documentation is useful; documentation with broken relative links is less so.
+2. `mkdocs build --strict` is too strict, can not check files outside of `docs/` directory.
+3. Other existing tools I found were too slow, taking up to 10 seconds. This tool typically runs in milliseconds:
+
+```sh
+$ hyperfine "relcheck run"
+Benchmark 1: relcheck run
+  Time (mean ± σ):      32.2 ms ±   0.2 ms    [User: 11.7 ms, System: 15.2 ms]
+  Range (min … max):    31.3 ms …  32.8 ms    84 runs
+```
 
 ## Installation
 
 ```sh
-brew install anttiharju/tap/vmatch
+sudo sh -c "curl -sSfL https://raw.githubusercontent.com/anttiharju/relcheck/HEAD/relcheck.bash -o /usr/local/bin/relcheck && chmod +x /usr/local/bin/relcheck"
 ```
 
-and afterwards for further instructions run
+Note: the tool depends on awk, and not all versions of awk are apparently compatible. Install `gawk` in case you're having issues.
 
-```sh
-vmatch doctor
-```
-
-Mainly, you should have `~/.vmatch/bin` in your PATH.
-
-### Updating
-
-```sh
-brew update && brew upgrade vmatch
-```
-
-## Integrations
-
-### VS Code
-
-#### Go
-
-Open your project via `code .` or similar from your shell where `vmatch doctor` reports the installation as healthy to ensure a vmatch-managed version of Go is available.
-
-#### golangci-lint
-
-Follow guidance at [https://golangci-lint.run/welcome/integrations/#visual-studio-code](https://golangci-lint.run/welcome/integrations/#visual-studio-code) but specify the full path of your ~/.vmatch/bin/golangci-lint as an alternate lint tool, like this:
-
-```json
-  "go.alternateTools": {
-    "lintTool": "/Users/antti/.vmatch/bin/golangci-lint",
-  },
-```
-
-### Renovate
-
-I _think_ one can configure Renovate to maintain the `.golangci-version` file for you, see [https://www.jvt.me/posts/2022/12/15/renovate-golangci-lint/](https://www.jvt.me/posts/2022/12/15/renovate-golangci-lint/) for an example.
-
-## How
-
-`vmatch` traverses the filesystem upwards until it finds the file `.golangci-version` and `go.mod`. These files should be in the same directory, but it is not enforced.
-
-Go versions are downloaded from Google servers and stored under `~/.vmatch`, like this:
-
-```tree
-.vmatch
-├── bin
-│   ├── go
-│   ├── golangci-lint
-│   └── gopls -> /Users/antti/go/bin/gopls
-├── go
-│   ├── v1.21.0
-│   ├── v1.23.0
-│   ├── v1.23.5
-│   ├── v1.24.2
-│   └── v1.24.3
-└── golangci-lint
-    ├── v1.63.4
-    └── v2.1.6
-
-11 directories, 3 files
-```
-
-Contents of `~/.vmatch/bin` are symlinked from `$(go env GOPATH)/bin`, expect for `go` or `golangci-lint`, because those are shell scripts that wrap `vmatch`
-
-If your `go.mod` does not specify the full version, for example `1.24` instead of `1.24.3`, `vmatch` defaults to `1.24.0` for simplicity, surprisingly, sometimes there is a Go `1.minor` and sometimes a Go `1.minor.0` version released. See for yourself:
-
-- [https://dl.google.com/go/go1.20.darwin-amd64.pkg](https://dl.google.com/go/go1.20.darwin-amd64.pkg) and
-- [https://dl.google.com/go/go1.21.0.darwin-amd64.pkg](https://dl.google.com/go/go1.21.0.darwin-amd64.pkg)
+Eventually there will be a rewrite to produce a static binary without this issue.
 
 ## Usage
 
-After you have completed the installation, you can simply use `go` and `golangci-lint` as usual, as long as there's a `.golangci-version` or `go.mod` file available in current directory or above.
+In integrated terminals of editors such as VS Code, the reported broken links such as `dist/brew/README.md:5:19` are clickable when holding ctrl/cmd to bring your cursor right to where the ^ indicator points:
 
-Note that when a version is downloaded for the first time, your commands may appear to hang. The time it takes depends on your internet speed and computer.
+```sh
+$ relcheck run
+dist/brew/README.md:5:19: broken relative link (file not found):
+- [`values.bash`](./values.sh) is required by the [render-template](https://github.com/anttiharju/actions/tree/v0/render-template) action.
+                  ^
+```
+
+The `file:line:column` link syntax is the same one that golangci-lint uses.
+
+### Manual
+
+Using defaults inside a Git repository
+
+```sh
+relcheck run
+```
+
+for advanced usage, refer to the printed out info from
+
+```sh
+relcheck
+```
+
+### Git pre-commit hook (via Lefthook)
+
+[Lefthook](https://github.com/evilmartians/lefthook) is an awesome Git hooks manager, enabling [shift-left testing](https://en.wikipedia.org/wiki/Shift-left_testing) that improves developer experience. `relcheck` was built for usage with Lefthook. Here is a minimal `lefthook.yml` example:
+
+```yml
+output:
+  - success
+  - failure
+
+pre-commit:
+  parallel: true
+  jobs:
+    # Install from https://github.com/anttiharju/relcheck
+    - name: relcheck
+      run: relcheck run
+```
+
+### GitHub Actions
+
+A composite action is available through my [actions monorepo](https://github.com/anttiharju/actions/tree/v0/relcheck). Here is a minimal `.github/workflows/build.yml` example:
+
+```yml
+name: Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: relcheck
+        uses: anttiharju/actions/relcheck@fa0a8b6cd47e30e4abf7ce4fbbd8ec0f377405db
+```
 
 ## Stargazers over time
 
-[![Stargazers over time](https://starchart.cc/anttiharju/vmatch.svg?variant=adaptive)](https://starchart.cc/anttiharju/vmatch)
+[![Stargazers over time](https://starchart.cc/anttiharju/relcheck.svg?variant=adaptive)](https://starchart.cc/anttiharju/relcheck)
+
+## Why
+
+This tool was developed alongside and mainly for https://github.com/anttiharju/vmatch. Idea is to have `vmatch` to be as linted as possible to make maintaining the project a breeze. Additionally the tooling built to support it will make my future projects easier to work on, allowing me to mostly focus on functionality without existing things breaking while I refactor the projects to my will.
