@@ -12,14 +12,14 @@ import (
 
 //nolint:cyclop,funlen
 func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode.Exitcode {
-	reporter := reporter.New(verbose, forceColors)
+	report := reporter.New(verbose, forceColors)
 
 	exitCode := exitcode.Success // default
 
 	for _, filepath := range files {
 		// Check if the file exists
 		if !fileutils.FileExists(filepath) {
-			reporter.FileNotFound(filepath)
+			report.FileNotFound(filepath)
 
 			exitCode = exitcode.BrokenLinks
 
@@ -29,7 +29,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 		// Scan the file for links
 		scanResult, err := scan.File(filepath)
 		if err != nil {
-			reporter.ScanError(filepath, err)
+			report.ScanError(filepath, err)
 
 			exitCode = exitcode.BrokenLinks
 
@@ -38,7 +38,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 
 		// If no links are found, report and continue
 		if len(scanResult.Links) == 0 {
-			reporter.NoLinks(filepath)
+			report.NoLinks(filepath)
 
 			continue
 		}
@@ -51,7 +51,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 			// URL-decode the link path
 			decodedPath, err := url.QueryUnescape(link.Path)
 			if err != nil {
-				reporter.ScanError(filepath, err)
+				report.ScanError(filepath, err)
 
 				continue
 			}
@@ -62,7 +62,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 			// Check if target file exists
 			if !fileutils.FileExists(fullpath) {
 				lineContent, _ := fileutils.GetLineContent(filepath, link.Line)
-				reporter.BrokenLink(filepath, link, "file not found", lineContent)
+				report.BrokenLink(filepath, link, "file not found", lineContent)
 
 				brokenLinksFound = true
 
@@ -74,7 +74,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 				// Get anchors from target file (uses cache when possible)
 				targetScan, err := scan.File(fullpath)
 				if err != nil {
-					reporter.ScanError(filepath, err)
+					report.ScanError(filepath, err)
 
 					continue
 				}
@@ -82,7 +82,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 				// Check if the anchor exists
 				if !anchor.Contains(targetScan.Anchors, link.Anchor) {
 					lineContent, _ := fileutils.GetLineContent(filepath, link.Line)
-					reporter.BrokenLink(filepath, link, "anchor not found", lineContent)
+					report.BrokenLink(filepath, link, "anchor not found", lineContent)
 
 					brokenLinksFound = true
 
@@ -95,7 +95,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 		}
 
 		// Report valid links if any
-		reporter.ValidLinks(filepath, validLinksCount, brokenLinksFound)
+		report.ValidLinks(filepath, validLinksCount, brokenLinksFound)
 
 		// Update exit code if broken links were found
 		if brokenLinksFound {
@@ -104,7 +104,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 	}
 
 	// Report success if all links are valid
-	reporter.Success()
+	report.Success()
 
 	return exitCode
 }
