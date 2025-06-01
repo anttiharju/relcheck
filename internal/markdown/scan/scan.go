@@ -19,11 +19,11 @@ type Result struct {
 //nolint:gochecknoglobals
 var scanCache = make(map[string]Result)
 
-var relativeLinkPattern = regexp.MustCompile(`\]\(\.[^)]*\)`) // catch ./ or ../ prefixes
-
-var headingPattern = regexp.MustCompile(`^#{1,6} `)
-
-var headingTextPattern = regexp.MustCompile(`^#+[ \t]+`)
+var (
+	relativeLinkPattern = regexp.MustCompile(`\]\(\.[^)]*\)`) // catch ./ or ../ prefixes
+	headingPattern      = regexp.MustCompile(`^#{1,6} `)
+	headingTextPattern  = regexp.MustCompile(`^#+[ \t]+`)
+)
 
 //nolint:cyclop,funlen
 func File(filepath string) (Result, error) {
