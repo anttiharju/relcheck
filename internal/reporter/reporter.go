@@ -48,10 +48,7 @@ func (r *Reporter) BrokenLink(filename string, brokenLink link.Link, errorType s
 		r.Colors.Bold, filename, brokenLink.Line, brokenLink.Column,
 		r.Colors.Reset, r.Colors.Red, errorType, r.Colors.Reset)
 
-	// Show the line content
 	fmt.Println(lineContent)
-
-	// Show the pointer to the link
 	fmt.Printf("%s%s%s\n", r.Colors.Yellow, strings.Repeat(" ", brokenLink.Column-1)+"^", r.Colors.Reset)
 
 	r.ErrorCount++
