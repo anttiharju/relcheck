@@ -94,7 +94,7 @@ func scanFile(file *os.File) (Result, error) {
 }
 
 func isCodeBlockMarker(line string) bool {
-	trimmedLine := strings.TrimLeft(line, " ")
+	trimmedLine := strings.TrimLeft(line, " \t")
 
 	return strings.HasPrefix(trimmedLine, "```")
 }
