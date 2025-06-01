@@ -57,10 +57,10 @@ func ParseArgs(args []string) (Command, Options, []string) {
 			options.Verbose = true
 		case "--color=always":
 			options.ForceColor = true
-		case "run":
-			command = RunOnAllMarkdown
 		case "version":
 			command = ShowVersion
+		case "run":
+			command = RunOnAllMarkdown
 		default:
 			command = RunOnInputFiles
 
