@@ -29,6 +29,8 @@ func Start(_ context.Context, args []string) int {
 	// If no files provided, show usage
 	if len(opts.Files) == 0 {
 		cli.PrintUsage()
+
+		return exitcode.Success
 	}
 
 	// Determine terminal colors
