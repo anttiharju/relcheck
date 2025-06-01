@@ -22,7 +22,6 @@ func New(colors color.Palette, verbose bool) *Reporter {
 	}
 }
 
-// FileNotFound reports a file that doesn't exist
 func (r *Reporter) FileNotFound(filename string) {
 	fmt.Printf("%sError:%s %sFile not found: %s%s\n",
 		r.Colors.Bold, r.Colors.Reset, r.Colors.Red, r.Colors.Reset, filename)
@@ -30,8 +29,7 @@ func (r *Reporter) FileNotFound(filename string) {
 	r.ErrorCount++
 }
 
-// ReportProcessingError reports an error processing a file
-func (r *Reporter) ReportProcessingError(filename string, err error) {
+func (r *Reporter) ScanError(filename string, err error) {
 	fmt.Printf("%sError:%s Could not process file %s: %v\n",
 		r.Colors.Bold, r.Colors.Reset, filename, err)
 

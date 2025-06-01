@@ -33,7 +33,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 		// Scan the file for links
 		scanResult, err := scanner.ScanFile(file)
 		if err != nil {
-			reporter.ReportProcessingError(file, err)
+			reporter.ScanError(file, err)
 
 			exitCode = exitcode.BrokenLinks
 
@@ -55,7 +55,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 			// URL-decode the link path
 			decodedPath, err := url.QueryUnescape(link.Path)
 			if err != nil {
-				reporter.ReportProcessingError(file, err)
+				reporter.ScanError(file, err)
 
 				continue
 			}
@@ -78,7 +78,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 				// Get anchors from target file (uses cache when possible)
 				targetScan, err := scanner.ScanFile(fullPath)
 				if err != nil {
-					reporter.ReportProcessingError(file, err)
+					reporter.ScanError(file, err)
 
 					continue
 				}
