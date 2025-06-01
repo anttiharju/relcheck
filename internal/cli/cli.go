@@ -32,7 +32,7 @@ func Run(_ context.Context, args []string) exitcode.Exitcode {
 	case Usage:
 		return showUsage()
 	case ShowVersion:
-		return version.Print("relcheck")
+		return version.Print()
 	case RunOnAllMarkdown:
 		return program.Start(opts.Verbose, opts.ForceColor, findAllMarkdownFiles())
 	case RunOnInputFiles:
