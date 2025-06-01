@@ -21,20 +21,17 @@ pre-commit:
       run: editorconfig-checker {staged_files}
 
     - name: go build
-      glob: "{dist/wrap/*,internal/*,pkg/*,go.mod,main.go}"
+      glob: "{dist/wrap/*,internal/*,go.mod,main.go}"
       run: go build
 
     - name: go test
-      glob: "{dist/wrap/*,internal/*,pkg/*,go.mod,main.go}"
+      glob: "{dist/wrap/*,internal/*,go.mod,main.go}"
       run: go test ./...
 
     - name: golangci-lint
       glob: "{.golangci-version,.golangci.yml,*.go}"
       run: golangci-lint run --fix
       stage_fixed: true
-
-    #    - name: Keep generic
-    #      run: ./.github/actions/keep-generic/action.sh
 
     - name: Keep .yml
       glob: "*.yaml"
