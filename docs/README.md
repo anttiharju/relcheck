@@ -11,8 +11,8 @@
 ```sh
 $ hyperfine "relcheck all"
 Benchmark 1: relcheck all
-  Time (mean ± σ):      32.2 ms ±   0.2 ms    [User: 11.7 ms, System: 15.2 ms]
-  Range (min … max):    31.3 ms …  32.8 ms    84 runs
+  Time (mean ± σ):       7.2 ms ±   0.5 ms    [User: 3.8 ms, System: 3.2 ms]
+  Range (min … max):     6.5 ms …   9.7 ms    286 runs
 ```
 
 ## Installation
