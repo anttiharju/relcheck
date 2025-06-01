@@ -43,8 +43,7 @@ func (r *Reporter) NoLinks(filename string) {
 	}
 }
 
-// ReportBrokenLink reports a broken link
-func (r *Reporter) ReportBrokenLink(filename string, brokenLink link.Link, errorType string, lineContent string) {
+func (r *Reporter) BrokenLink(filename string, brokenLink link.Link, errorType string, lineContent string) {
 	fmt.Printf("%s%s:%d:%d:%s %sbroken relative link (%s):%s\n",
 		r.Colors.Bold, filename, brokenLink.Line, brokenLink.Column,
 		r.Colors.Reset, r.Colors.Red, errorType, r.Colors.Reset)
