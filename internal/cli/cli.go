@@ -12,7 +12,20 @@ import (
 	"github.com/anttiharju/relcheck/internal/version"
 )
 
-// ExecuteCommand handles special commands like "run" and "version"
+type Command int
+
+const (
+	Usage Command = iota
+	ShowVersion
+	RunOnAllMarkdown
+	RunOnInputFiles
+)
+
+type Options struct {
+	Verbose    bool
+	ForceColor bool
+}
+
 func Run(_ context.Context, args []string) exitcode.Exitcode {
 	cmd, opts, files := ParseArgs(args)
 	switch cmd {
@@ -27,6 +40,35 @@ func Run(_ context.Context, args []string) exitcode.Exitcode {
 	default:
 		return showUsage()
 	}
+}
+
+func ParseArgs(args []string) (Command, Options, []string) {
+	command := Usage // default
+	options := Options{
+		Verbose:    false,
+		ForceColor: false,
+	}
+	files := []string{}
+
+	for i := range args {
+		arg := args[i]
+		switch arg {
+		case "--verbose":
+			options.Verbose = true
+		case "--color=always":
+			options.ForceColor = true
+		case "run":
+			command = RunOnAllMarkdown
+		case "version":
+			command = ShowVersion
+		default:
+			command = RunOnInputFiles
+
+			files = append(files, arg)
+		}
+	}
+
+	return command, options, files
 }
 
 // findAllMarkdownFiles uses git ls-files to find all markdown files
