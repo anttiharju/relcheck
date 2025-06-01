@@ -52,3 +52,7 @@ tmp
 
 # rubocop-file action
 /*.lock
+
+# integration tests
+tests/got
+tests/.exit_code

@@ -88,10 +88,13 @@ func main() {
 			// Construct the full path relative to the file's location
 			fullPath := filepath.Join(dir, decodedLink)
 
+			// Use base filename only for error messages (to match bash script output)
+			baseFilename := filepath.Base(file)
+
 			if _, err := os.Stat(fullPath); os.IsNotExist(err) {
-				// Print the file location in bold
+				// Print the file location in bold - match exact format from the bash script
 				fmt.Printf("%s%s:%d:%d:%s %sbroken relative link (file not found):%s\n",
-					colors.bold, file, link.line, link.col, colors.reset, colors.red, colors.reset)
+					colors.bold, baseFilename, link.line, link.col, colors.reset, colors.red, colors.reset)
 
 				// Extract the line content for context
 				lineContent, _ := getLineContent(file, link.line)
@@ -110,7 +113,7 @@ func main() {
 
 				if !contains(anchors, linkAnchor) {
 					fmt.Printf("%s%s:%d:%d:%s %sbroken relative link (anchor not found):%s\n",
-						colors.bold, file, link.line, link.col, colors.reset, colors.red, colors.reset)
+						colors.bold, baseFilename, link.line, link.col, colors.reset, colors.red, colors.reset)
 					lineContent, _ := getLineContent(file, link.line)
 					fmt.Println(lineContent)
 					fmt.Printf("%s%s%s\n", colors.yellow, strings.Repeat(" ", link.col-1)+"^", colors.reset)
@@ -160,8 +163,8 @@ type Link struct {
 	col  int
 }
 
-// Markdown link regex pattern - matches relative links like [text](./path)
-var relativeLinkPattern = regexp.MustCompile(`\]\(\.[^)]*\)`)
+// Markdown link regex pattern - matches relative links like [text](./path) or [text](../path)
+var relativeLinkPattern = regexp.MustCompile(`\]\((\.\.?/[^)]*)\)`)
 
 // extracts relative links from a markdown file
 func extractRelativeLinks(filename string) ([]Link, error) {
@@ -192,17 +195,19 @@ func extractRelativeLinks(filename string) ([]Link, error) {
 		}
 
 		// Find relative links in the line
-		matches := relativeLinkPattern.FindAllStringIndex(line, -1)
+		matches := relativeLinkPattern.FindAllStringSubmatchIndex(line, -1)
 		for _, match := range matches {
-			start, end := match[0], match[1]
-			// Extract URL without ](
-			url := line[start+2 : end-1]
-			// Column position is start+2 (after the ]()
-			colPosition := start + 3
+			// match[0], match[1] is the entire match
+			// match[2], match[3] is the capture group (\.\.?/[^)]*)
+			start, end := match[2], match[3]
+			// Extract URL from the capture group
+			url := line[start:end]
+			// Calculate column position - we need to adjust to where the link actually starts
+			urlStartInMarkdown := strings.LastIndex(line[:start], "(") + 1
 			links = append(links, Link{
 				url:  url,
 				line: lineNumber,
-				col:  colPosition,
+				col:  urlStartInMarkdown + 1, // +1 because columns start at 1
 			})
 		}
 	}
@@ -337,21 +342,41 @@ func isTerminal() bool {
 
 // parses command-line flags
 func parseFlags() options {
-	verbose := flag.Bool("verbose", false, "Enable verbose output")
-	colorAlways := flag.Bool("color", false, "Force color output")
-	flag.Parse()
+	// Define the flags
+	flagSet := flag.NewFlagSet("relcheck", flag.ExitOnError)
+	verbose := flagSet.Bool("verbose", false, "Enable verbose output")
+	color := flagSet.Bool("color", false, "Force color output")
+
+	// Special handling for --color=always format
+	colorAlways := false
+	for i, arg := range os.Args {
+		if arg == "--color=always" {
+			// Remove this arg to avoid flagSet parsing error
+			os.Args = append(os.Args[:i], os.Args[i+1:]...)
+			colorAlways = true
+			break
+		}
+	}
+
+	// Parse the remaining flags
+	err := flagSet.Parse(os.Args[1:])
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error parsing flags: %v\n", err)
+		os.Exit(1)
+	}
 
 	opts := options{
 		verbose:    *verbose,
-		forceColor: *colorAlways,
+		forceColor: *color || colorAlways,
 		files:      []string{},
 	}
 
 	// Process remaining arguments
-	for i, arg := range flag.Args() {
+	args := flagSet.Args()
+	for i, arg := range args {
 		if i == 0 && arg == "run" {
 			// Use git ls-files to find all markdown files
-			cmd := exec.Command("git", "ls-files", "*.md")
+			cmd := exec.Command("git", "ls-files", "*.md", "*.markdown")
 			var out bytes.Buffer
 			cmd.Stdout = &out
 
