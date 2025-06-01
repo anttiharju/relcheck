@@ -26,8 +26,8 @@ pre-commit:
     - name: EditorConfig-Checker
       run: editorconfig-checker {staged_files}
 
-    - name: check-relative-markdown-links
-      run: ./check-relative-markdown-links.bash run
+    - name: relcheck
+      run: ./relcheck.bash run
 
     - name: Tests
       run: ./test.sh

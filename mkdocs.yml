@@ -1,4 +1,4 @@
-site_name: check-relative-markdown-links
+site_name: relcheck
 theme:
   name: material
   palette:

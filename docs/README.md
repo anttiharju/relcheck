@@ -1,6 +1,6 @@
 # Introduction
 
-[![Tests](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/tests.yml/badge.svg)](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/tests.yml) [![Linters](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/linters.yml/badge.svg)](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/linters.yml) [![Docs build](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/docs-build.yml/badge.svg)](https://github.com/anttiharju/check-relative-markdown-links/actions/workflows/docs-build.yml)
+[![Tests](https://github.com/anttiharju/relcheck/actions/workflows/tests.yml/badge.svg)](https://github.com/anttiharju/relcheck/actions/workflows/tests.yml) [![Linters](https://github.com/anttiharju/relcheck/actions/workflows/linters.yml/badge.svg)](https://github.com/anttiharju/relcheck/actions/workflows/linters.yml) [![Docs build](https://github.com/anttiharju/relcheck/actions/workflows/docs-build.yml/badge.svg)](https://github.com/anttiharju/relcheck/actions/workflows/docs-build.yml)
 
 ## Why
 
@@ -9,8 +9,8 @@
 3. Other existing tools I found were too slow, taking up to 10 seconds. This tool typically runs in milliseconds:
 
 ```sh
-$ hyperfine "check-relative-markdown-links run"
-Benchmark 1: check-relative-markdown-links run
+$ hyperfine "relcheck run"
+Benchmark 1: relcheck run
   Time (mean ± σ):      32.2 ms ±   0.2 ms    [User: 11.7 ms, System: 15.2 ms]
   Range (min … max):    31.3 ms …  32.8 ms    84 runs
 ```
@@ -18,7 +18,7 @@ Benchmark 1: check-relative-markdown-links run
 ## Installation
 
 ```sh
-sudo sh -c "curl -sSfL https://raw.githubusercontent.com/anttiharju/check-relative-markdown-links/HEAD/check-relative-markdown-links.bash -o /usr/local/bin/check-relative-markdown-links && chmod +x /usr/local/bin/check-relative-markdown-links"
+sudo sh -c "curl -sSfL https://raw.githubusercontent.com/anttiharju/relcheck/HEAD/relcheck.bash -o /usr/local/bin/relcheck && chmod +x /usr/local/bin/relcheck"
 ```
 
 Note: the tool depends on awk, and not all versions of awk are apparently compatible. Install `gawk` in case you're having issues.
@@ -30,7 +30,7 @@ Eventually there will be a rewrite to produce a static binary without this issue
 In integrated terminals of editors such as VS Code, the reported broken links such as `dist/brew/README.md:5:19` are clickable when holding ctrl/cmd to bring your cursor right to where the ^ indicator points:
 
 ```sh
-$ check-relative-markdown-links run
+$ relcheck run
 dist/brew/README.md:5:19: broken relative link (file not found):
 - [`values.bash`](./values.sh) is required by the [render-template](https://github.com/anttiharju/actions/tree/v0/render-template) action.
                   ^
@@ -43,18 +43,18 @@ The `file:line:column` link syntax is the same one that golangci-lint uses.
 Using defaults inside a Git repository
 
 ```sh
-check-relative-markdown-links run
+relcheck run
 ```
 
 for advanced usage, refer to the printed out info from
 
 ```sh
-check-relative-markdown-links
+relcheck
 ```
 
 ### Git pre-commit hook (via Lefthook)
 
-[Lefthook](https://github.com/evilmartians/lefthook) is an awesome Git hooks manager, enabling [shift-left testing](https://en.wikipedia.org/wiki/Shift-left_testing) that improves developer experience. `check-relative-markdown-links` was built for usage with Lefthook. Here is a minimal `lefthook.yml` example:
+[Lefthook](https://github.com/evilmartians/lefthook) is an awesome Git hooks manager, enabling [shift-left testing](https://en.wikipedia.org/wiki/Shift-left_testing) that improves developer experience. `relcheck` was built for usage with Lefthook. Here is a minimal `lefthook.yml` example:
 
 ```yml
 output:
@@ -64,14 +64,14 @@ output:
 pre-commit:
   parallel: true
   jobs:
-    # Install from https://github.com/anttiharju/check-relative-markdown-links
-    - name: check-relative-markdown-links
-      run: check-relative-markdown-links run
+    # Install from https://github.com/anttiharju/relcheck
+    - name: relcheck
+      run: relcheck run
 ```
 
 ### GitHub Actions
 
-A composite action is available through my [actions monorepo](https://github.com/anttiharju/actions/tree/v0/check-relative-markdown-links). Here is a minimal `.github/workflows/build.yml` example:
+A composite action is available through my [actions monorepo](https://github.com/anttiharju/actions/tree/v0/relcheck). Here is a minimal `.github/workflows/build.yml` example:
 
 ```yml
 name: Build
@@ -89,13 +89,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: check-relative-markdown-links
-        uses: anttiharju/actions/check-relative-markdown-links@fa0a8b6cd47e30e4abf7ce4fbbd8ec0f377405db
+      - name: relcheck
+        uses: anttiharju/actions/relcheck@fa0a8b6cd47e30e4abf7ce4fbbd8ec0f377405db
 ```
 
 ## Stargazers over time
 
-[![Stargazers over time](https://starchart.cc/anttiharju/check-relative-markdown-links.svg?variant=adaptive)](https://starchart.cc/anttiharju/check-relative-markdown-links)
+[![Stargazers over time](https://starchart.cc/anttiharju/relcheck.svg?variant=adaptive)](https://starchart.cc/anttiharju/relcheck)
 
 ## Why
 

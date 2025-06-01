@@ -33,5 +33,5 @@ jobs:
         uses: anttiharju/actions/editorconfig-checker@v0
 
       - if: always()
-        name: check-relative-markdown-links
-        uses: anttiharju/actions/check-relative-markdown-links@v0
+        name: relcheck
+        uses: anttiharju/actions/relcheck@v0
