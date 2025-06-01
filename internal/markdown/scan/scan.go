@@ -25,9 +25,8 @@ var (
 	headingTextPattern  = regexp.MustCompile(`^#+[ \t]+`)
 )
 
-//nolint:cyclop,funlen
 func File(filepath string) (Result, error) {
-	// Check if we've already scanned this file
+	// Check cache first
 	if result, ok := scanCache[filepath]; ok {
 		return result, nil
 	}
@@ -38,9 +37,20 @@ func File(filepath string) (Result, error) {
 	}
 	defer file.Close()
 
-	var links []link.Link
+	result, err := scanFile(file)
+	if err != nil {
+		return Result{}, err
+	}
 
-	var anchors []string
+	// Cache the result
+	scanCache[filepath] = result
+
+	return result, nil
+}
+
+func scanFile(file *os.File) (Result, error) {
+	links := []link.Link{}
+	anchors := []string{}
 
 	scanner := bufio.NewScanner(file)
 	inCodeBlock := false
@@ -51,9 +61,8 @@ func File(filepath string) (Result, error) {
 		lineNumber++
 		line := scanner.Text()
 
-		// Check for code block
-		trimmedLine := strings.TrimLeft(line, " ")
-		if strings.HasPrefix(trimmedLine, "```") {
+		// Check for code block markers
+		if isCodeBlockMarker(line) {
 			inCodeBlock = !inCodeBlock
 
 			continue
@@ -64,65 +73,74 @@ func File(filepath string) (Result, error) {
 			continue
 		}
 
-		// 1. Extract links from this line
-		matches := relativeLinkPattern.FindAllStringIndex(line, -1)
-		for _, match := range matches {
-			start, end := match[0], match[1]
-			// Extract URL without ]( and )
-			urlText := line[start+2 : end-1]
-			// Column position is start+2 (matching bash script)
-			colPosition := start + 2
-
-			path, anchorText := link.SplitLinkAndAnchor(urlText)
-
-			links = append(links, link.Link{
-				URL:         urlText,
-				Line:        lineNumber,
-				Column:      colPosition + 1, // +1 because columns start at 1
-				Path:        path,
-				Anchor:      anchorText,
-				LineContent: line,
-			})
-		}
-
-		// 2. Look for headings in this line
-		if strings.HasPrefix(line, "#") {
-			// Match at least one # followed by a space
-			if !headingPattern.MatchString(line) {
-				continue
-			}
-
-			// Extract heading text without the leading #s
-			heading := headingTextPattern.ReplaceAllString(line, "")
-			// Remove trailing spaces
-			heading = strings.TrimRight(heading, " \t")
-
-			// Generate anchor
-			anchorText := anchor.GenerateAnchor(heading)
-
-			// Handle duplicate anchors
-			if count := anchorCount[anchorText]; count > 0 {
-				anchors = append(anchors, fmt.Sprintf("%s-%d", anchorText, count))
-			} else {
-				anchors = append(anchors, anchorText)
-			}
-
-			// Increment the counter for this anchor
-			anchorCount[anchorText]++
-		}
+		// Process links and headings
+		extractLinks(&links, line, lineNumber)
+		extractHeadings(&anchors, line, anchorCount)
 	}
 
 	if err := scanner.Err(); err != nil {
 		return Result{}, fmt.Errorf("error scanning file: %w", err)
 	}
 
-	result := Result{
+	return Result{
 		Links:   links,
 		Anchors: anchors,
+	}, nil
+}
+
+func isCodeBlockMarker(line string) bool {
+	trimmedLine := strings.TrimLeft(line, " ")
+
+	return strings.HasPrefix(trimmedLine, "```")
+}
+
+func extractLinks(links *[]link.Link, line string, lineNumber int) {
+	matches := relativeLinkPattern.FindAllStringIndex(line, -1)
+	for _, match := range matches {
+		start, end := match[0], match[1]
+		// Extract URL without ]( and )
+		urlText := line[start+2 : end-1]
+		// Column position is start+2
+		colPosition := start + 2
+
+		path, anchorText := link.SplitLinkAndAnchor(urlText)
+
+		*links = append(*links, link.Link{
+			URL:         urlText,
+			Line:        lineNumber,
+			Column:      colPosition + 1, // +1 because columns start at 1
+			Path:        path,
+			Anchor:      anchorText,
+			LineContent: line,
+		})
+	}
+}
+
+func extractHeadings(anchors *[]string, line string, anchorCount map[string]int) {
+	if !strings.HasPrefix(line, "#") {
+		return
 	}
 
-	// Cache the result
-	scanCache[filepath] = result
+	// Match at least one # followed by a space
+	if !headingPattern.MatchString(line) {
+		return
+	}
 
-	return result, nil
+	// Extract heading text without the leading #s
+	heading := headingTextPattern.ReplaceAllString(line, "")
+	// Remove trailing spaces
+	heading = strings.TrimRight(heading, " \t")
+
+	// Generate anchor
+	anchorText := anchor.GenerateAnchor(heading)
+
+	// Handle duplicate anchors
+	if count := anchorCount[anchorText]; count > 0 {
+		*anchors = append(*anchors, fmt.Sprintf("%s-%d", anchorText, count))
+	} else {
+		*anchors = append(*anchors, anchorText)
+	}
+
+	// Increment the counter for this anchor
+	anchorCount[anchorText]++
 }
