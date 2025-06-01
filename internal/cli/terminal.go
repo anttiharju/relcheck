@@ -23,8 +23,9 @@ const (
 	reset  = "\033[0m"
 )
 
-// GetColorScheme returns color scheme based on terminal capabilities
-func GetColorScheme(useColors bool) ColorScheme {
+func GetColorScheme(forceColor bool) ColorScheme {
+	useColors := isTerminal() || forceColor
+
 	if useColors {
 		return ColorScheme{
 			Bold:   bold,
@@ -39,8 +40,7 @@ func GetColorScheme(useColors bool) ColorScheme {
 	return ColorScheme{"", "", "", "", "", ""}
 }
 
-// IsTerminal checks if stdout is a terminal
-func IsTerminal() bool {
+func isTerminal() bool {
 	fileInfo, err := os.Stdout.Stat()
 	if err != nil {
 		return false

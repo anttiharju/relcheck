@@ -32,8 +32,7 @@ func Start(_ context.Context, args []string) int {
 	}
 
 	// Determine terminal colors
-	useColors := cli.IsTerminal() || opts.ForceColor
-	color := cli.GetColorScheme(useColors)
+	color := cli.GetColorScheme(opts.ForceColor)
 
 	exitCode := exitcode.Success
 
