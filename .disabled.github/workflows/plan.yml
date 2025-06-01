@@ -64,6 +64,12 @@ jobs:
         run: |
           go test ./...
 
+      - if: always() && (steps.changed.outputs.binary == 'true' || github.event_name != 'pull_request')
+        name: Integration tests
+        shell: sh
+        run: |
+          ./test.sh
+
       - if: always() && (steps.changed.outputs.go_code == 'true' || github.event_name != 'pull_request')
         name: golangci-lint
         uses: anttiharju/actions/golangci-lint@v1
