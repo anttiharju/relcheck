@@ -73,9 +73,14 @@ func scanFile(file *os.File) (Result, error) {
 			continue
 		}
 
-		// Process links and headings
+		// Process headings first, then links only if not a heading
+		if extractHeading(&anchors, line, anchorCount) {
+			// Skip link extraction for heading lines
+			continue
+		}
+
+		// Process links only for non-heading lines
 		extractLinks(&links, line, lineNumber)
-		extractHeadings(&anchors, line, anchorCount)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -116,14 +121,14 @@ func extractLinks(links *[]link.Link, line string, lineNumber int) {
 	}
 }
 
-func extractHeadings(anchors *[]string, line string, anchorCount map[string]int) {
+func extractHeading(anchors *[]string, line string, anchorCount map[string]int) bool {
 	if !strings.HasPrefix(line, "#") {
-		return
+		return false
 	}
 
 	// Match at least one # followed by a space
 	if !headingPattern.MatchString(line) {
-		return
+		return false
 	}
 
 	// Extract heading text without the leading #s
@@ -143,4 +148,6 @@ func extractHeadings(anchors *[]string, line string, anchorCount map[string]int)
 
 	// Increment the counter for this anchor
 	anchorCount[anchorText]++
+
+	return true
 }
