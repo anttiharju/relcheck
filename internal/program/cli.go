@@ -23,9 +23,9 @@ type options struct {
 }
 
 //nolint:gocognit,cyclop,funlen
-func Start(_ context.Context, _ []string) int {
+func Start(_ context.Context, args []string) int {
 	// Parse command line arguments manually to match the bash script behavior exactly
-	opts := parseArgs(os.Args[1:])
+	opts := parseArgs(args)
 
 	// If no files provided, show usage
 	if len(opts.files) == 0 {
