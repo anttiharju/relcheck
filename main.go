@@ -10,16 +10,8 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
-)
 
-// Terminal colors
-const (
-	bold   = "\033[1m"
-	red    = "\033[31m"
-	yellow = "\033[33m"
-	green  = "\033[32m"
-	gray   = "\033[90m"
-	reset  = "\033[0m"
+	"github.com/anttiharju/relcheck/pkg/colors"
 )
 
 // CLI flags and files
@@ -378,7 +370,7 @@ type ColorScheme struct {
 // returns color scheme based on terminal capabilities
 func getColorScheme(useColors bool) ColorScheme {
 	if useColors {
-		return ColorScheme{bold, red, yellow, green, gray, reset}
+		return ColorScheme{colors.Bold, colors.Red, colors.Yellow, colors.Green, colors.Gray, colors.Reset}
 	}
 
 	return ColorScheme{"", "", "", "", "", ""}
