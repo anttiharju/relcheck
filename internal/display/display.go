@@ -68,23 +68,19 @@ func (r *Reporter) ReportValidLinks(filename string, count int, hasBrokenLinks b
 		return
 	}
 
-	//nolint:nestif
+	// Format the count text based on singular/plural
+	countText := "1 valid relative link"
+	if count > 1 {
+		countText = fmt.Sprintf("%d valid relative links", count)
+	}
+
+	// Format the output based on whether broken links were found
 	if !hasBrokenLinks {
-		if count == 1 {
-			fmt.Printf("%s✓%s %s: found 1 valid relative link\n",
-				r.Colors.Green, r.Colors.Reset, filename)
-		} else {
-			fmt.Printf("%s✓%s %s: found %d valid relative links\n",
-				r.Colors.Green, r.Colors.Reset, filename, count)
-		}
+		fmt.Printf("%s✓%s %s: found %s\n",
+			r.Colors.Green, r.Colors.Reset, filename, countText)
 	} else {
-		if count == 1 {
-			fmt.Printf("%s%s: also found 1 valid relative link%s\n",
-				r.Colors.Gray, filename, r.Colors.Reset)
-		} else {
-			fmt.Printf("%s%s: also found %d valid relative links%s\n",
-				r.Colors.Gray, filename, count, r.Colors.Reset)
-		}
+		fmt.Printf("%s%s: also found %s%s\n",
+			r.Colors.Gray, filename, countText, r.Colors.Reset)
 	}
 }
 
