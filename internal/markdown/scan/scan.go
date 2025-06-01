@@ -49,10 +49,13 @@ func File(filepath string) (Result, error) {
 		line := scanner.Text()
 
 		// Check for code block
-		if strings.HasPrefix(line, "```") {
-			inCodeBlock = !inCodeBlock
+		if strings.Contains(line, "```") {
+			trimmedLine := strings.Trim(line, " ")
+			if strings.HasPrefix(trimmedLine, "```") {
+				inCodeBlock = !inCodeBlock
 
-			continue
+				continue
+			}
 		}
 
 		// Skip content in code blocks
