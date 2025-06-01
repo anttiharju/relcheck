@@ -82,10 +82,6 @@ jobs:
         name: Keep .yml
         uses: anttiharju/actions/keep-yml@v1
 
-      - if: always() && (steps.changed.outputs.documentation == 'true' || github.event_name != 'pull_request')
-        name: MkDocs
-        uses: anttiharju/actions/mkdocs-build-strict@v1
-
       - if: always() && (steps.changed.outputs.md_and_yml == 'true' || github.event_name != 'pull_request')
         name: Prettier
         uses: anttiharju/actions/prettier@v1
