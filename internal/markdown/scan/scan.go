@@ -1,4 +1,4 @@
-package scanner
+package scan
 
 import (
 	"bufio"
@@ -11,17 +11,17 @@ import (
 	"github.com/anttiharju/relcheck/internal/markdown/link"
 )
 
-// ScanResult stores both links and anchors from a single file scan
-type ScanResult struct {
+// Result stores both links and anchors from a single file scan
+type Result struct {
 	Links   []link.Link
 	Anchors []string
 }
 
 //nolint:gochecknoglobals
-var scanCache = make(map[string]ScanResult)
+var scanCache = make(map[string]Result)
 
 //nolint:cyclop,funlen
-func ScanFile(filename string) (ScanResult, error) {
+func File(filename string) (Result, error) {
 	// Check if we've already scanned this file
 	if result, ok := scanCache[filename]; ok {
 		return result, nil
@@ -29,7 +29,7 @@ func ScanFile(filename string) (ScanResult, error) {
 
 	file, err := os.Open(filename)
 	if err != nil {
-		return ScanResult{}, fmt.Errorf("failed to open file %s: %w", filename, err)
+		return Result{}, fmt.Errorf("failed to open file %s: %w", filename, err)
 	}
 	defer file.Close()
 
@@ -109,10 +109,10 @@ func ScanFile(filename string) (ScanResult, error) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		return ScanResult{}, fmt.Errorf("error scanning file: %w", err)
+		return Result{}, fmt.Errorf("error scanning file: %w", err)
 	}
 
-	result := ScanResult{
+	result := Result{
 		Links:   links,
 		Anchors: anchors,
 	}

@@ -7,7 +7,7 @@ import (
 	"github.com/anttiharju/relcheck/internal/exitcode"
 	"github.com/anttiharju/relcheck/internal/fileutils"
 	"github.com/anttiharju/relcheck/internal/markdown/anchor"
-	"github.com/anttiharju/relcheck/internal/markdown/scanner"
+	"github.com/anttiharju/relcheck/internal/markdown/scan"
 	"github.com/anttiharju/relcheck/internal/reporter"
 )
 
@@ -31,7 +31,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 		}
 
 		// Scan the file for links
-		scanResult, err := scanner.ScanFile(file)
+		scanResult, err := scan.File(file)
 		if err != nil {
 			reporter.ScanError(file, err)
 
@@ -76,7 +76,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 			// If an anchor exists, check if it's valid
 			if link.Anchor != "" {
 				// Get anchors from target file (uses cache when possible)
-				targetScan, err := scanner.ScanFile(fullPath)
+				targetScan, err := scan.File(fullPath)
 				if err != nil {
 					reporter.ScanError(file, err)
 
