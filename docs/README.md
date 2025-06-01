@@ -9,8 +9,8 @@
 3. Other existing tools I found were too slow, taking up to 10 seconds. This tool typically runs in milliseconds:
 
 ```sh
-$ hyperfine "relcheck run"
-Benchmark 1: relcheck run
+$ hyperfine "relcheck all"
+Benchmark 1: relcheck all
   Time (mean ± σ):      32.2 ms ±   0.2 ms    [User: 11.7 ms, System: 15.2 ms]
   Range (min … max):    31.3 ms …  32.8 ms    84 runs
 ```
@@ -30,7 +30,7 @@ Eventually there will be a rewrite to produce a static binary without this issue
 In integrated terminals of editors such as VS Code, the reported broken links such as `dist/brew/README.md:5:19` are clickable when holding ctrl/cmd to bring your cursor right to where the ^ indicator points:
 
 ```sh
-$ relcheck run
+$ relcheck all
 dist/brew/README.md:5:19: broken relative link (file not found):
 - [`values.bash`](./values.sh) is required by the [render-template](https://github.com/anttiharju/actions/tree/v0/render-template) action.
                   ^
@@ -43,7 +43,7 @@ The `file:line:column` link syntax is the same one that golangci-lint uses.
 Using defaults inside a Git repository
 
 ```sh
-relcheck run
+relcheck all
 ```
 
 for advanced usage, refer to the printed out info from
@@ -66,7 +66,7 @@ pre-commit:
   jobs:
     # Install from https://github.com/anttiharju/relcheck
     - name: relcheck
-      run: relcheck run
+      run: relcheck all
 ```
 
 ### GitHub Actions

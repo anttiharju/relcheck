@@ -13,9 +13,8 @@ pre-commit:
       glob: ".github/workflows/*.yml"
       run: actionlint -color
 
-    # https://github.com/anttiharju/relcheck
     - name: relcheck
-      run: relcheck run
+      run: ./relcheck all
 
     - name: EditorConfig-Checker
       run: editorconfig-checker {staged_files}

@@ -57,7 +57,7 @@ func ParseArgs(args []string) (Command, Options, []string) {
 			options.ForceColor = true
 		case "version":
 			command = ShowVersion
-		case "run":
+		case "all":
 			command = RunOnAllMarkdown
 		default:
 			command = RunOnInputFiles
@@ -66,7 +66,7 @@ func ParseArgs(args []string) (Command, Options, []string) {
 		}
 	}
 
-	if len(inputFiles) == 0 {
+	if command == RunOnInputFiles && len(inputFiles) == 0 {
 		command = Usage // fallback
 	}
 
