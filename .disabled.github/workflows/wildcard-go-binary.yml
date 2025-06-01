@@ -5,8 +5,10 @@ on:
     paths:
       - "pkg/**/*"
       - "internal/**/*"
+      - "tests/**/*"
       - "go.mod"
       - "main.go"
+      - "test.sh"
 
 jobs:
   wildcard:
