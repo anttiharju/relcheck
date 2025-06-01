@@ -6,18 +6,15 @@ import (
 	"strings"
 )
 
-// alphanumeric, space and hyphen
-var alphanumericSpaceHyphenPattern = regexp.MustCompile(`[^a-z0-9 -]`)
+var validCharactersPattern = regexp.MustCompile(`[^a-z0-9 -]`)
 
 var multipleHyphensPattern = regexp.MustCompile(`-+`)
 
-// GenerateAnchor creates a GitHub-compatible anchor from heading text
 func GenerateAnchor(heading string) string {
-	// Convert to lowercase
 	anchor := strings.ToLower(heading)
 
 	// Remove anything that's not alphanumeric, space, or hyphen
-	anchor = alphanumericSpaceHyphenPattern.ReplaceAllString(anchor, "")
+	anchor = validCharactersPattern.ReplaceAllString(anchor, "")
 
 	// Convert spaces to hyphens
 	anchor = strings.ReplaceAll(anchor, " ", "-")
