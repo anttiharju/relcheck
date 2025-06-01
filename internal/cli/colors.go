@@ -4,6 +4,7 @@ import (
 	"os"
 )
 
+// ANSI color codes
 const (
 	bold   = "\033[1m"
 	red    = "\033[31m"
@@ -36,7 +37,7 @@ func GetColorScheme(forceColor bool) ColorScheme {
 		}
 	}
 
-	return ColorScheme{"", "", "", "", "", ""}
+	return ColorScheme{"", "", "", "", "", ""} // in case program is being piped into a file or another command
 }
 
 func isTerminal() bool {
