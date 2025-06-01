@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"runtime/debug"
 	"strings"
+
+	"github.com/anttiharju/relcheck/internal/exitcode"
 )
 
-func Print(appName string) int {
+// TODO: do the same thing that interrupt does for getting appName
+func Print(appName string) exitcode.Exitcode {
 	if buildInfo, ok := debug.ReadBuildInfo(); ok {
 		version := strings.TrimPrefix(buildInfo.Main.Version, "v")
 		goVersion := buildInfo.GoVersion
@@ -25,7 +28,9 @@ func Print(appName string) int {
 		}
 
 		fmt.Printf("%s has version %s built with %s from %s on %s\n", appName, version, goVersion, revision, buildTime)
+	} else {
+		return exitcode.VersionError
 	}
 
-	return 0
+	return exitcode.Success
 }

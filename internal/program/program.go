@@ -2,7 +2,6 @@ package program
 
 import (
 	"bufio"
-	"context"
 	"fmt"
 	"net/url"
 	"os"
@@ -10,7 +9,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/anttiharju/relcheck/internal/cli"
+	"github.com/anttiharju/relcheck/internal/colors"
 	"github.com/anttiharju/relcheck/internal/exitcode"
 )
 
@@ -22,31 +21,15 @@ type Link struct {
 }
 
 //nolint:gocognit,cyclop,funlen
-func Start(_ context.Context, args []string) int {
-	// Parse command line arguments manually to match the bash script behavior exactly
-	opts := cli.ParseOptions(args)
-
-	// Handle special commands
-	if !cli.ExecuteCommand(&opts) {
-		// If ExecuteCommand returns false, we should exit (e.g., after showing version)
-		return exitcode.Success
-	}
-
-	// If no files provided, show usage
-	if len(opts.Files) == 0 {
-		cli.PrintUsage()
-
-		return exitcode.InvalidArgs
-	}
-
-	// Determine terminal colors
-	colors := cli.GetColorScheme(opts.ForceColor)
+func Start(verbose, forceColor bool, files []string) exitcode.Exitcode {
+	// Determine terminal color
+	color := colors.GetColorScheme(forceColor)
 
 	exitCode := exitcode.Success
 
-	for _, file := range opts.Files {
+	for _, file := range files {
 		if _, err := os.Stat(file); os.IsNotExist(err) {
-			fmt.Printf("%sError:%s %sFile not found: %s%s\n", colors.Bold, colors.Reset, colors.Red, colors.Reset, file)
+			fmt.Printf("%sError:%s %sFile not found: %s%s\n", color.Bold, color.Reset, color.Red, color.Reset, file)
 
 			exitCode = 1
 
@@ -59,7 +42,7 @@ func Start(_ context.Context, args []string) int {
 		// Extract links from the markdown file
 		links, err := extractRelativeLinks(file)
 		if err != nil {
-			fmt.Printf("%sError:%s Could not process file %s: %v\n", colors.Bold, colors.Reset, file, err)
+			fmt.Printf("%sError:%s Could not process file %s: %v\n", color.Bold, color.Reset, file, err)
 
 			exitCode = 1
 
@@ -68,8 +51,8 @@ func Start(_ context.Context, args []string) int {
 
 		// If no links are found, continue to the next file
 		if len(links) == 0 {
-			if opts.Verbose {
-				fmt.Printf("%s✓%s %s: %sno relative links%s\n", colors.Green, colors.Reset, file, colors.Gray, colors.Reset)
+			if verbose {
+				fmt.Printf("%s✓%s %s: %sno relative links%s\n", color.Green, color.Reset, file, color.Gray, color.Reset)
 			}
 
 			continue
@@ -85,7 +68,7 @@ func Start(_ context.Context, args []string) int {
 			// URL-decode the link path
 			decodedLink, err := url.QueryUnescape(linkPath)
 			if err != nil {
-				fmt.Printf("%sError:%s Could not decode URL %s: %v\n", colors.Bold, colors.Reset, linkPath, err)
+				fmt.Printf("%sError:%s Could not decode URL %s: %v\n", color.Bold, color.Reset, linkPath, err)
 
 				continue
 			}
@@ -98,32 +81,32 @@ func Start(_ context.Context, args []string) int {
 			if _, err := os.Stat(fullPath); os.IsNotExist(err) {
 				// Print the file location in bold - match exact format from the bash script
 				fmt.Printf("%s%s:%d:%d:%s %sbroken relative link (file not found):%s\n",
-					colors.Bold, file, link.line, link.col, colors.Reset, colors.Red, colors.Reset)
+					color.Bold, file, link.line, link.col, color.Reset, color.Red, color.Reset)
 
 				// Extract the line content for context
 				lineContent, _ := getLineContent(file, link.line)
 				fmt.Println(lineContent)
 
 				// Print line content with yellow indicator pointing to the link position
-				fmt.Printf("%s%s%s\n", colors.Yellow, strings.Repeat(" ", link.col-1)+"^", colors.Reset)
+				fmt.Printf("%s%s%s\n", color.Yellow, strings.Repeat(" ", link.col-1)+"^", color.Reset)
 
 				brokenLinksFound = true
 			} else if linkAnchor != "" {
 				// If an anchor exists, check if it's valid
 				anchors, err := getMarkdownAnchors(fullPath)
 				if err != nil {
-					fmt.Printf("%sError:%s Could not extract anchors from %s: %v\n", colors.Bold, colors.Reset, fullPath, err)
+					fmt.Printf("%sError:%s Could not extract anchors from %s: %v\n", color.Bold, color.Reset, fullPath, err)
 
 					continue
 				}
 
 				if !contains(anchors, linkAnchor) {
 					fmt.Printf("%s%s:%d:%d:%s %sbroken relative link (anchor not found):%s\n",
-						colors.Bold, file, link.line, link.col, colors.Reset, colors.Red, colors.Reset)
+						color.Bold, file, link.line, link.col, color.Reset, color.Red, color.Reset)
 
 					lineContent, _ := getLineContent(file, link.line)
 					fmt.Println(lineContent)
-					fmt.Printf("%s%s%s\n", colors.Yellow, strings.Repeat(" ", link.col-1)+"^", colors.Reset)
+					fmt.Printf("%s%s%s\n", color.Yellow, strings.Repeat(" ", link.col-1)+"^", color.Reset)
 
 					brokenLinksFound = true
 				} else {
@@ -136,18 +119,18 @@ func Start(_ context.Context, args []string) int {
 
 		// If verbose mode and we have valid links, report them
 		//nolint:nestif
-		if opts.Verbose && validLinksCount > 0 {
+		if verbose && validLinksCount > 0 {
 			if !brokenLinksFound {
 				if validLinksCount == 1 {
-					fmt.Printf("%s✓%s %s: found 1 valid relative link\n", colors.Green, colors.Reset, file)
+					fmt.Printf("%s✓%s %s: found 1 valid relative link\n", color.Green, color.Reset, file)
 				} else {
-					fmt.Printf("%s✓%s %s: found %d valid relative links\n", colors.Green, colors.Reset, file, validLinksCount)
+					fmt.Printf("%s✓%s %s: found %d valid relative links\n", color.Green, color.Reset, file, validLinksCount)
 				}
 			} else {
 				if validLinksCount == 1 {
-					fmt.Printf("%s%s: also found 1 valid relative link%s\n", colors.Gray, file, colors.Reset)
+					fmt.Printf("%s%s: also found 1 valid relative link%s\n", color.Gray, file, color.Reset)
 				} else {
-					fmt.Printf("%s%s: also found %d valid relative links%s\n", colors.Gray, file, validLinksCount, colors.Reset)
+					fmt.Printf("%s%s: also found %d valid relative links%s\n", color.Gray, file, validLinksCount, color.Reset)
 				}
 			}
 		}
@@ -158,8 +141,8 @@ func Start(_ context.Context, args []string) int {
 	}
 
 	// Show success message if all links are valid, but only in verbose mode
-	if exitCode == exitcode.Success && opts.Verbose {
-		fmt.Printf("%s✓%s %sAll relative links are valid!%s\n", colors.Green, colors.Reset, colors.Bold, colors.Reset)
+	if exitCode == exitcode.Success && verbose {
+		fmt.Printf("%s✓%s %sAll relative links are valid!%s\n", color.Green, color.Reset, color.Bold, color.Reset)
 	}
 
 	return exitCode
