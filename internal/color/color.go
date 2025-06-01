@@ -1,4 +1,4 @@
-package colors
+package color
 
 import (
 	"os"
@@ -14,7 +14,7 @@ const (
 	reset  = "\033[0m"
 )
 
-type ColorScheme struct {
+type Palette struct {
 	Bold   string
 	Red    string
 	Yellow string
@@ -23,11 +23,11 @@ type ColorScheme struct {
 	Reset  string
 }
 
-func GetColorScheme(forceColor bool) ColorScheme {
+func GetPalette(forceColor bool) Palette {
 	useColors := isTerminal() || forceColor
 
 	if useColors {
-		return ColorScheme{
+		return Palette{
 			Bold:   bold,
 			Red:    red,
 			Yellow: yellow,
@@ -37,7 +37,7 @@ func GetColorScheme(forceColor bool) ColorScheme {
 		}
 	}
 
-	return ColorScheme{"", "", "", "", "", ""} // in case program is being piped into a file or another command
+	return Palette{"", "", "", "", "", ""} // in case program is being piped into a file or another command
 }
 
 func isTerminal() bool {
