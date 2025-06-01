@@ -22,8 +22,8 @@ func New(colors color.Palette, verbose bool) *Reporter {
 	}
 }
 
-// ReportFileNotFound reports a file that doesn't exist
-func (r *Reporter) ReportFileNotFound(filename string) {
+// FileNotFound reports a file that doesn't exist
+func (r *Reporter) FileNotFound(filename string) {
 	fmt.Printf("%sError:%s %sFile not found: %s%s\n",
 		r.Colors.Bold, r.Colors.Reset, r.Colors.Red, r.Colors.Reset, filename)
 

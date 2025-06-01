@@ -23,7 +23,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 	for _, file := range files {
 		// Check if the file exists
 		if !fileutils.FileExists(file) {
-			reporter.ReportFileNotFound(file)
+			reporter.FileNotFound(file)
 
 			exitCode = exitcode.BrokenLinks
 
