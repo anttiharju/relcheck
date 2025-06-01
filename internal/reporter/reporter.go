@@ -14,7 +14,9 @@ type Reporter struct {
 	ErrorCount int
 }
 
-func New(colors color.Palette, verbose bool) *Reporter {
+func New(verbose, forceColors bool) *Reporter {
+	colors := color.GetPalette(forceColors)
+
 	return &Reporter{
 		Colors:  colors,
 		Verbose: verbose,

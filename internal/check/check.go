@@ -3,7 +3,6 @@ package check
 import (
 	"net/url"
 
-	"github.com/anttiharju/relcheck/internal/color"
 	"github.com/anttiharju/relcheck/internal/exitcode"
 	"github.com/anttiharju/relcheck/internal/fileutils"
 	"github.com/anttiharju/relcheck/internal/markdown/anchor"
@@ -13,9 +12,7 @@ import (
 
 //nolint:cyclop,funlen
 func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode.Exitcode {
-	// Initialize reporter with terminal colors
-	colors := color.GetPalette(forceColors)
-	reporter := reporter.New(colors, verbose)
+	reporter := reporter.New(verbose, forceColors)
 
 	// Default exit code is success
 	exitCode := exitcode.Success
