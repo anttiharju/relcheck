@@ -13,6 +13,7 @@ import (
 	"strings"
 
 	"github.com/anttiharju/relcheck/pkg/colors"
+	"github.com/anttiharju/relcheck/pkg/version"
 )
 
 // CLI flags and files
@@ -31,6 +32,7 @@ func Start(_ context.Context, args []string) int {
 	if len(opts.files) == 0 {
 		fmt.Println("Usage: relcheck [--verbose] [--color=always] <file1.md> [file2.md] ...")
 		fmt.Println("   or: relcheck [--verbose] [--color=always] run  (to check all *.md files in Git)")
+		fmt.Println("   or: relcheck version  (to show version information)")
 		os.Exit(1)
 	}
 
@@ -198,6 +200,8 @@ func parseArgs(args []string) options {
 					opts.files = append(opts.files, scanner.Text())
 				}
 			}
+		case "version":
+			os.Exit(version.Print("relcheck"))
 		default:
 			opts.files = append(opts.files, arg)
 		}
