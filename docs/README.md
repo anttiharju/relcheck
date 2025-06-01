@@ -1,6 +1,6 @@
 # Introduction
 
-[![Tests](https://github.com/anttiharju/relcheck/actions/workflows/tests.yml/badge.svg)](https://github.com/anttiharju/relcheck/actions/workflows/tests.yml) [![Linters](https://github.com/anttiharju/relcheck/actions/workflows/linters.yml/badge.svg)](https://github.com/anttiharju/relcheck/actions/workflows/linters.yml) [![Docs build](https://github.com/anttiharju/relcheck/actions/workflows/docs-build.yml/badge.svg)](https://github.com/anttiharju/relcheck/actions/workflows/docs-build.yml)
+[![Build](https://github.com/anttiharju/relcheck/actions/workflows/build.yml/badge.svg?event=push)](https://github.com/anttiharju/relcheck/actions/workflows/build.yml)
 
 ## Why
 
