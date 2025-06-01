@@ -8,7 +8,7 @@ echo 0 > "$tmp_exit_code"
 
 (
     cd docs/examples || exit
-    ../../relcheck run --verbose --color=always > ../../tests/got/valid-use
+    ../../relcheck all --verbose --color=always > ../../tests/got/valid-use
     cd ../../tests || exit
 
     if [ "$1" = "--regenerate" ]; then

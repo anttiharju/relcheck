@@ -1,6 +1,12 @@
 package exitcode
 
+type Exitcode int
+
 const (
-	Success = iota
+	Success Exitcode = iota
 	Interrupt
+	VersionError
+	UsageError
+	InvalidArgs
+	BrokenLinks
 )
