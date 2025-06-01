@@ -20,15 +20,15 @@ type Result struct {
 var scanCache = make(map[string]Result)
 
 //nolint:cyclop,funlen
-func File(filename string) (Result, error) {
+func File(filepath string) (Result, error) {
 	// Check if we've already scanned this file
-	if result, ok := scanCache[filename]; ok {
+	if result, ok := scanCache[filepath]; ok {
 		return result, nil
 	}
 
-	file, err := os.Open(filename)
+	file, err := os.Open(filepath)
 	if err != nil {
-		return Result{}, fmt.Errorf("failed to open file %s: %w", filename, err)
+		return Result{}, fmt.Errorf("failed to open file %s: %w", filepath, err)
 	}
 	defer file.Close()
 
@@ -117,7 +117,7 @@ func File(filename string) (Result, error) {
 	}
 
 	// Cache the result
-	scanCache[filename] = result
+	scanCache[filepath] = result
 
 	return result, nil
 }
