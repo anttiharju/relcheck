@@ -27,6 +27,7 @@ func NewReporter(colors color.Palette, verbose bool) *Reporter {
 func (r *Reporter) ReportFileNotFound(filename string) {
 	fmt.Printf("%sError:%s %sFile not found: %s%s\n",
 		r.Colors.Bold, r.Colors.Reset, r.Colors.Red, r.Colors.Reset, filename)
+
 	r.ErrorCount++
 }
 
@@ -34,6 +35,7 @@ func (r *Reporter) ReportFileNotFound(filename string) {
 func (r *Reporter) ReportProcessingError(filename string, err error) {
 	fmt.Printf("%sError:%s Could not process file %s: %v\n",
 		r.Colors.Bold, r.Colors.Reset, filename, err)
+
 	r.ErrorCount++
 }
 

@@ -35,6 +35,7 @@ func Extract(filename string) ([]string, error) {
 		// Check for code block
 		if strings.HasPrefix(line, "```") {
 			inCodeBlock = !inCodeBlock
+
 			continue
 		}
 
@@ -103,5 +104,6 @@ func Contains(slice []string, item string) bool {
 			return true
 		}
 	}
+
 	return false
 }

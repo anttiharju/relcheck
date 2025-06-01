@@ -43,6 +43,7 @@ func Extract(filename string) ([]Link, error) {
 		// Check for code block
 		if strings.HasPrefix(line, "```") {
 			inCodeBlock = !inCodeBlock
+
 			continue
 		}
 
@@ -85,6 +86,7 @@ func SplitLinkAndAnchor(link string) (string, string) {
 	if len(parts) == 2 {
 		return parts[0], parts[1]
 	}
+
 	return link, ""
 }
 

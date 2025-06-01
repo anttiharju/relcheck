@@ -10,6 +10,7 @@ import (
 // FileExists checks if a file exists
 func FileExists(path string) bool {
 	_, err := os.Stat(path)
+
 	return !os.IsNotExist(err)
 }
 
@@ -37,5 +38,6 @@ func GetLineContent(filename string, lineNumber int) (string, error) {
 // ResolveRelativePath resolves a relative path against a base file
 func ResolveRelativePath(baseFile, relativePath string) string {
 	dir := filepath.Dir(baseFile)
+
 	return filepath.Join(dir, relativePath)
 }

@@ -34,6 +34,7 @@ func ScanFile(filename string) (ScanResult, error) {
 	defer file.Close()
 
 	var links []link.Link
+
 	var anchors []string
 
 	scanner := bufio.NewScanner(file)
@@ -51,6 +52,7 @@ func ScanFile(filename string) (ScanResult, error) {
 		// Check for code block
 		if strings.HasPrefix(line, "```") {
 			inCodeBlock = !inCodeBlock
+
 			continue
 		}
 
