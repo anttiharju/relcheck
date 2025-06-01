@@ -4,12 +4,15 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"path/filepath"
 )
 
-func Listen(name string, exitcode int, signals ...os.Signal) {
+func Listen(exitcode int, signals ...os.Signal) {
 	interruptCh := make(chan os.Signal, 1)
 	signal.Notify(interruptCh, signals...)
 	<-interruptCh
-	fmt.Printf("\n%s: interrupted\n", name) // leading \n to have ^C appear on its own line
+
+	programName := filepath.Base(os.Args[0])
+	fmt.Printf("\n%s: interrupted\n", programName) // leading \n to have ^C appear on its own line
 	os.Exit(exitcode)
 }

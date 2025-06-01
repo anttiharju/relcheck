@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	go interrupt.Listen("relcheck", exitcode.Interrupt, os.Interrupt)
+	go interrupt.Listen(exitcode.Interrupt, os.Interrupt)
 
 	ctx := context.Background()
 	exitCode := cli.Start(ctx, os.Args[1:])
