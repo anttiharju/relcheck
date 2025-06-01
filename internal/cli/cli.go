@@ -27,28 +27,28 @@ type Options struct {
 }
 
 func Run(_ context.Context, args []string) exitcode.Exitcode {
-	cmd, opts, files := ParseArgs(args)
+	cmd, opts, inputFiles := ParseArgs(args)
 	switch cmd {
+	case Usage:
+		return showUsage()
 	case ShowVersion:
 		return version.Print("relcheck")
 	case RunOnAllMarkdown:
 		return program.Start(opts.Verbose, opts.ForceColor, findAllMarkdownFiles())
 	case RunOnInputFiles:
-		return program.Start(opts.Verbose, opts.ForceColor, files)
-	case Usage:
 		fallthrough
 	default:
-		return showUsage()
+		return program.Start(opts.Verbose, opts.ForceColor, inputFiles)
 	}
 }
 
 func ParseArgs(args []string) (Command, Options, []string) {
-	command := Usage // default
+	command := RunOnInputFiles // default
 	options := Options{
 		Verbose:    false,
 		ForceColor: false,
 	}
-	files := []string{}
+	inputFiles := []string{}
 
 	for i := range args {
 		arg := args[i]
@@ -64,11 +64,15 @@ func ParseArgs(args []string) (Command, Options, []string) {
 		default:
 			command = RunOnInputFiles
 
-			files = append(files, arg)
+			inputFiles = append(inputFiles, arg)
 		}
 	}
 
-	return command, options, files
+	if len(inputFiles) == 0 {
+		command = Usage // fallback
+	}
+
+	return command, options, inputFiles
 }
 
 // findAllMarkdownFiles uses git ls-files to find all markdown files
