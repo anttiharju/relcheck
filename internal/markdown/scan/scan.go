@@ -31,12 +31,14 @@ func File(filepath string) (Result, error) {
 		return result, nil
 	}
 
+	// Open the file
 	file, err := os.Open(filepath)
 	if err != nil {
 		return Result{}, fmt.Errorf("failed to open file %s: %w", filepath, err)
 	}
 	defer file.Close()
 
+	// Scan the file
 	result, err := scanFile(file)
 	if err != nil {
 		return Result{}, err
@@ -61,26 +63,21 @@ func scanFile(file *os.File) (Result, error) {
 		lineNumber++
 		line := scanner.Text()
 
-		// Check for code block markers
-		if isCodeBlockMarker(line) {
+		if hasCodeBlockMarker(line) {
 			inCodeBlock = !inCodeBlock
 
 			continue
 		}
 
-		// Skip content in code blocks
 		if inCodeBlock {
 			continue
 		}
 
-		// Process headings first, then links only if not a heading
 		if extractHeading(&anchors, line, anchorCount) {
-			// Skip link extraction for heading lines
-			continue
+			continue // skip link extraction if line is a heading
 		}
 
-		// Process links only for non-heading lines
-		extractLinks(&links, line, lineNumber)
+		extractLink(&links, line, lineNumber)
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -93,19 +90,19 @@ func scanFile(file *os.File) (Result, error) {
 	}, nil
 }
 
-func isCodeBlockMarker(line string) bool {
+func hasCodeBlockMarker(line string) bool {
 	trimmedLine := strings.TrimLeft(line, " \t")
 
 	return strings.HasPrefix(trimmedLine, "```")
 }
 
-func extractLinks(links *[]link.Link, line string, lineNumber int) {
+func extractLink(links *[]link.Link, line string, lineNumber int) {
 	matches := relativeLinkPattern.FindAllStringIndex(line, -1)
 	for _, match := range matches {
 		start, end := match[0], match[1]
 		// Extract URL without ]( and )
 		urlText := line[start+2 : end-1]
-		// Column position is start+2
+		// Skip ](
 		colPosition := start + 2
 
 		path, anchorText := link.SplitLinkAndAnchor(urlText)
@@ -126,7 +123,7 @@ func extractHeading(anchors *[]string, line string, anchorCount map[string]int) 
 		return false
 	}
 
-	// Match at least one # followed by a space
+	// Match 1 to 6 #s followed by a space
 	if !headingPattern.MatchString(line) {
 		return false
 	}
