@@ -11,7 +11,6 @@ import (
 	"github.com/anttiharju/relcheck/internal/markdown/link"
 )
 
-// Result stores both links and anchors from a single file scan
 type Result struct {
 	Links   []link.Link
 	Anchors []string
