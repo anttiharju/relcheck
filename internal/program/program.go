@@ -26,11 +26,17 @@ func Start(_ context.Context, args []string) int {
 	// Parse command line arguments manually to match the bash script behavior exactly
 	opts := cli.ParseOptions(args)
 
+	// Handle special commands
+	if !cli.ExecuteCommand(&opts) {
+		// If ExecuteCommand returns false, we should exit (e.g., after showing version)
+		return exitcode.Success
+	}
+
 	// If no files provided, show usage
 	if len(opts.Files) == 0 {
 		cli.PrintUsage()
 
-		return exitcode.Success
+		return exitcode.InvalidArgs
 	}
 
 	// Determine terminal colors
