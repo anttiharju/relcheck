@@ -19,6 +19,12 @@ type Result struct {
 //nolint:gochecknoglobals
 var scanCache = make(map[string]Result)
 
+var relativeLinkPattern = regexp.MustCompile(`\]\(\.[^)]*\)`) // catch ./ or ../ prefixes
+
+var headingPattern = regexp.MustCompile(`^#{1,6} `)
+
+var headingTextPattern = regexp.MustCompile(`^#+[ \t]+`)
+
 //nolint:cyclop,funlen
 func File(filepath string) (Result, error) {
 	// Check if we've already scanned this file
@@ -40,9 +46,6 @@ func File(filepath string) (Result, error) {
 	inCodeBlock := false
 	lineNumber := 0
 	anchorCount := make(map[string]int)
-
-	// Markdown link regex pattern - matches relative links with ./ or ../ prefixes
-	relativeLinkPattern := regexp.MustCompile(`\]\(\.[^)]*\)`)
 
 	for scanner.Scan() {
 		lineNumber++
@@ -86,12 +89,12 @@ func File(filepath string) (Result, error) {
 		// 2. Look for headings in this line
 		if strings.HasPrefix(line, "#") {
 			// Match at least one # followed by a space
-			if !regexp.MustCompile(`^#{1,6} `).MatchString(line) {
+			if !headingPattern.MatchString(line) {
 				continue
 			}
 
 			// Extract heading text without the leading #s
-			heading := regexp.MustCompile(`^#+[ \t]+`).ReplaceAllString(line, "")
+			heading := headingTextPattern.ReplaceAllString(line, "")
 			// Remove trailing spaces
 			heading = strings.TrimRight(heading, " \t")
 
