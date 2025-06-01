@@ -1,0 +1,15 @@
+on:
+  push:
+    branches:
+      - wildcard
+    paths:
+      - "docs/**/*"
+      - "mkdocs.yml"
+
+jobs:
+  wildcard:
+    runs-on: ubuntu-latest
+    if: false
+    steps:
+      - run: |
+          true

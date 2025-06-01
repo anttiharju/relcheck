@@ -1,0 +1,47 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  plan:
+    name: Plan
+    uses: ./.github/workflows/plan.yml
+
+  release:
+    name: Release
+    needs:
+      - plan
+    if: needs.plan.outputs.release == 'true'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/release.yml
+    with:
+      type: ${{ needs.plan.outputs.release_type }}
+
+  distribute:
+    name: Distribute
+    needs:
+      - plan
+      - release
+    if: needs.plan.outputs.release == 'true'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/distribute.yml
+    with:
+      tag: ${{ needs.release.outputs.tag }}
+    secrets: inherit
+
+  documentation:
+    name: Documentation
+    needs:
+      - plan
+      - release
+    if: |
+      always() && !failure() && !cancelled() &&
+      needs.plan.outputs.documentation == 'true'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/documentation.yml
+    secrets: inherit

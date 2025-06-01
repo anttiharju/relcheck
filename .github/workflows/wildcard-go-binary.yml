@@ -1,0 +1,19 @@
+on:
+  push:
+    branches:
+      - wildcard
+    paths:
+      - "pkg/**/*"
+      - "internal/**/*"
+      - "tests/**/*"
+      - "go.mod"
+      - "main.go"
+      - "test.sh"
+
+jobs:
+  wildcard:
+    runs-on: ubuntu-latest
+    if: false
+    steps:
+      - run: |
+          true

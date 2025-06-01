@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -u
 
-# https://github.com/anttiharju/check-relative-markdown-links
+# https://github.com/anttiharju/relcheck
 
 # Process arguments
 verbose=0
@@ -34,8 +34,8 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ ${#files[@]} -eq 0 ]]; then
-    echo "Usage: check-relative-markdown-links [--verbose] [--color=always] <file1.md> [file2.md] ..."
-    echo "   or: check-relative-markdown-links [--verbose] [--color=always] run  (to check all *.md files in Git)"
+    echo "Usage: relcheck [--verbose] [--color=always] <file1.md> [file2.md] ..."
+    echo "   or: relcheck [--verbose] [--color=always] run  (to check all *.md files in Git)"
     exit 1
 fi
 

@@ -7,7 +7,7 @@ This tool ignores .markdown files by default, so you can still retain syntax hig
 If you want to use file extensions other than `.md`, you can feed any desired files to the tool with a command such as
 
 ```sh
-check-relative-markdown-links --verbose $(git ls-files '*.markdown')
+relcheck --verbose $(git ls-files '*.markdown')
 ```
 
 although be aware that ShellCheck will complain of such use. There's a way to do it in a compliant way, but it won't be a neat oneliner. Also files with spaces won't work with the above approach, as ShellCheck correctly points out with [SC2046](https://www.shellcheck.net/wiki/SC2046). ShellCheck is awesome.
