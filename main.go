@@ -43,13 +43,13 @@ func main() {
 
 	// Determine terminal colors
 	useColors := isTerminal() || opts.forceColor
-	colors := getColorScheme(useColors)
+	color := getColorScheme(useColors)
 
 	exitCode := 0
 
 	for _, file := range opts.files {
 		if _, err := os.Stat(file); os.IsNotExist(err) {
-			fmt.Printf("%sError:%s %sFile not found: %s%s\n", colors.bold, colors.reset, colors.red, colors.reset, file)
+			fmt.Printf("%sError:%s %sFile not found: %s%s\n", color.bold, color.reset, color.red, color.reset, file)
 
 			exitCode = 1
 
@@ -62,7 +62,7 @@ func main() {
 		// Extract links from the markdown file
 		links, err := extractRelativeLinks(file)
 		if err != nil {
-			fmt.Printf("%sError:%s Could not process file %s: %v\n", colors.bold, colors.reset, file, err)
+			fmt.Printf("%sError:%s Could not process file %s: %v\n", color.bold, color.reset, file, err)
 
 			exitCode = 1
 
@@ -72,7 +72,7 @@ func main() {
 		// If no links are found, continue to the next file
 		if len(links) == 0 {
 			if opts.verbose {
-				fmt.Printf("%s✓%s %s: %sno relative links%s\n", colors.green, colors.reset, file, colors.gray, colors.reset)
+				fmt.Printf("%s✓%s %s: %sno relative links%s\n", color.green, color.reset, file, color.gray, color.reset)
 			}
 
 			continue
@@ -88,7 +88,7 @@ func main() {
 			// URL-decode the link path
 			decodedLink, err := url.QueryUnescape(linkPath)
 			if err != nil {
-				fmt.Printf("%sError:%s Could not decode URL %s: %v\n", colors.bold, colors.reset, linkPath, err)
+				fmt.Printf("%sError:%s Could not decode URL %s: %v\n", color.bold, color.reset, linkPath, err)
 
 				continue
 			}
@@ -101,32 +101,32 @@ func main() {
 			if _, err := os.Stat(fullPath); os.IsNotExist(err) {
 				// Print the file location in bold - match exact format from the bash script
 				fmt.Printf("%s%s:%d:%d:%s %sbroken relative link (file not found):%s\n",
-					colors.bold, file, link.line, link.col, colors.reset, colors.red, colors.reset)
+					color.bold, file, link.line, link.col, color.reset, color.red, color.reset)
 
 				// Extract the line content for context
 				lineContent, _ := getLineContent(file, link.line)
 				fmt.Println(lineContent)
 
 				// Print line content with yellow indicator pointing to the link position
-				fmt.Printf("%s%s%s\n", colors.yellow, strings.Repeat(" ", link.col-1)+"^", colors.reset)
+				fmt.Printf("%s%s%s\n", color.yellow, strings.Repeat(" ", link.col-1)+"^", color.reset)
 
 				brokenLinksFound = true
 			} else if linkAnchor != "" {
 				// If an anchor exists, check if it's valid
 				anchors, err := getMarkdownAnchors(fullPath)
 				if err != nil {
-					fmt.Printf("%sError:%s Could not extract anchors from %s: %v\n", colors.bold, colors.reset, fullPath, err)
+					fmt.Printf("%sError:%s Could not extract anchors from %s: %v\n", color.bold, color.reset, fullPath, err)
 
 					continue
 				}
 
 				if !contains(anchors, linkAnchor) {
 					fmt.Printf("%s%s:%d:%d:%s %sbroken relative link (anchor not found):%s\n",
-						colors.bold, file, link.line, link.col, colors.reset, colors.red, colors.reset)
+						color.bold, file, link.line, link.col, color.reset, color.red, color.reset)
 
 					lineContent, _ := getLineContent(file, link.line)
 					fmt.Println(lineContent)
-					fmt.Printf("%s%s%s\n", colors.yellow, strings.Repeat(" ", link.col-1)+"^", colors.reset)
+					fmt.Printf("%s%s%s\n", color.yellow, strings.Repeat(" ", link.col-1)+"^", color.reset)
 
 					brokenLinksFound = true
 				} else {
@@ -142,15 +142,15 @@ func main() {
 		if opts.verbose && validLinksCount > 0 {
 			if !brokenLinksFound {
 				if validLinksCount == 1 {
-					fmt.Printf("%s✓%s %s: found 1 valid relative link\n", colors.green, colors.reset, file)
+					fmt.Printf("%s✓%s %s: found 1 valid relative link\n", color.green, color.reset, file)
 				} else {
-					fmt.Printf("%s✓%s %s: found %d valid relative links\n", colors.green, colors.reset, file, validLinksCount)
+					fmt.Printf("%s✓%s %s: found %d valid relative links\n", color.green, color.reset, file, validLinksCount)
 				}
 			} else {
 				if validLinksCount == 1 {
-					fmt.Printf("%s%s: also found 1 valid relative link%s\n", colors.gray, file, colors.reset)
+					fmt.Printf("%s%s: also found 1 valid relative link%s\n", color.gray, file, color.reset)
 				} else {
-					fmt.Printf("%s%s: also found %d valid relative links%s\n", colors.gray, file, validLinksCount, colors.reset)
+					fmt.Printf("%s%s: also found %d valid relative links%s\n", color.gray, file, validLinksCount, color.reset)
 				}
 			}
 		}
@@ -162,7 +162,7 @@ func main() {
 
 	// Show success message if all links are valid, but only in verbose mode
 	if exitCode == 0 && opts.verbose {
-		fmt.Printf("%s✓%s %sAll relative links are valid!%s\n", colors.green, colors.reset, colors.bold, colors.reset)
+		fmt.Printf("%s✓%s %sAll relative links are valid!%s\n", color.green, color.reset, color.bold, color.reset)
 	}
 
 	os.Exit(exitCode)
