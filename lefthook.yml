@@ -22,6 +22,7 @@ pre-commit:
         jobs:
           - run: go build
           - run: ./relcheck all
+          - run: ./test.sh
 
     - name: go test
       glob: "{dist/wrap/*,internal/*,go.mod,main.go}"
