@@ -1,0 +1,16 @@
+on:
+  push:
+    branches:
+      - wildcard
+    paths:
+      - "**/*.go"
+      - ".golangci-version"
+      - ".golangci.yml"
+
+jobs:
+  wildcard:
+    runs-on: ubuntu-latest
+    if: false
+    steps:
+      - run: |
+          true
