@@ -16,7 +16,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 	exitCode := exitcode.Success
 
 	for _, filepath := range files {
-		fileExitCode := processFile(filepath, report)
+		fileExitCode := isFileValid(filepath, report)
 		if fileExitCode != exitcode.Success {
 			exitCode = fileExitCode
 		}
@@ -29,7 +29,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 	return exitCode
 }
 
-func processFile(filepath string, report *reporter.Reporter) exitcode.Exitcode {
+func isFileValid(filepath string, report *reporter.Reporter) exitcode.Exitcode {
 	if !fileutils.FileExists(filepath) {
 		report.FileNotFound(filepath)
 
@@ -49,10 +49,10 @@ func processFile(filepath string, report *reporter.Reporter) exitcode.Exitcode {
 		return exitcode.Success
 	}
 
-	return validateLinks(filepath, scanResult, report)
+	return areLinksValid(filepath, scanResult, report)
 }
 
-func validateLinks(filepath string, scanResult scan.Result, report *reporter.Reporter) exitcode.Exitcode {
+func areLinksValid(filepath string, scanResult scan.Result, report *reporter.Reporter) exitcode.Exitcode {
 	brokenLinksFound := false
 	validLinksCount := 0
 
