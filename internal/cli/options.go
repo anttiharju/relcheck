@@ -16,8 +16,8 @@ type Options struct {
 	Files      []string
 }
 
-// ParseArgs parses command-line arguments to match bash script behavior
-func ParseArgs(args []string) Options {
+// ParseOptions parses command-line arguments to match bash script behavior
+func ParseOptions(args []string) Options {
 	opts := Options{
 		Verbose:    false,
 		ForceColor: false,

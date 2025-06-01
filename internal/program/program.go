@@ -24,7 +24,7 @@ type Link struct {
 //nolint:gocognit,cyclop,funlen
 func Start(_ context.Context, args []string) int {
 	// Parse command line arguments manually to match the bash script behavior exactly
-	opts := cli.ParseArgs(args)
+	opts := cli.ParseOptions(args)
 
 	// If no files provided, show usage
 	if len(opts.Files) == 0 {
