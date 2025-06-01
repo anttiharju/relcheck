@@ -36,8 +36,7 @@ func (r *Reporter) ScanError(filename string, err error) {
 	r.ErrorCount++
 }
 
-// ReportNoLinks reports when no links were found (verbose only)
-func (r *Reporter) ReportNoLinks(filename string) {
+func (r *Reporter) NoLinks(filename string) {
 	if r.Verbose {
 		fmt.Printf("%s✓%s %s: %sno relative links%s\n",
 			r.Colors.Green, r.Colors.Reset, filename, r.Colors.Gray, r.Colors.Reset)

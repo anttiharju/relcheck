@@ -42,7 +42,7 @@ func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode
 
 		// If no links are found, report and continue
 		if len(scanResult.Links) == 0 {
-			reporter.ReportNoLinks(file)
+			reporter.NoLinks(file)
 
 			continue
 		}
