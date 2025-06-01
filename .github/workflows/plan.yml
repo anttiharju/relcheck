@@ -74,9 +74,9 @@ jobs:
         name: golangci-lint
         uses: anttiharju/actions/golangci-lint@v1
 
-      - if: always()
-        name: Keep generic
-        uses: ./.github/actions/keep-generic
+      #      - if: always()
+      #        name: Keep generic
+      #        uses: ./.github/actions/keep-generic
 
       - if: always()
         name: Keep .yml
