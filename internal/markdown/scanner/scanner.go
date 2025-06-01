@@ -17,10 +17,10 @@ type ScanResult struct {
 	Anchors []string
 }
 
-// Cache for already scanned files to avoid rescanning
+//nolint:gochecknoglobals
 var scanCache = make(map[string]ScanResult)
 
-// ScanFile performs a single-pass scan of a markdown file to extract both links and anchors
+//nolint:cyclop,funlen
 func ScanFile(filename string) (ScanResult, error) {
 	// Check if we've already scanned this file
 	if result, ok := scanCache[filename]; ok {

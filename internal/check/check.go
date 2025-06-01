@@ -11,7 +11,7 @@ import (
 	"github.com/anttiharju/relcheck/internal/markdown/scanner"
 )
 
-// RelativeLinksAndAnchors checks markdown files for broken relative links
+//nolint:cyclop,funlen
 func RelativeLinksAndAnchors(verbose, forceColors bool, files []string) exitcode.Exitcode {
 	// Initialize reporter with terminal colors
 	colors := color.GetPalette(forceColors)

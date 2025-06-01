@@ -92,5 +92,10 @@ func SplitLinkAndAnchor(link string) (string, string) {
 
 // DecodeURL safely decodes a URL-encoded path
 func DecodeURL(path string) (string, error) {
-	return url.QueryUnescape(path)
+	decodedPath, err := url.QueryUnescape(path)
+	if err != nil {
+		return "", fmt.Errorf("failed to decode URL path: %w", err)
+	}
+
+	return decodedPath, nil
 }

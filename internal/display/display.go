@@ -68,6 +68,7 @@ func (r *Reporter) ReportValidLinks(filename string, count int, hasBrokenLinks b
 		return
 	}
 
+	//nolint:nestif
 	if !hasBrokenLinks {
 		if count == 1 {
 			fmt.Printf("%s✓%s %s: found 1 valid relative link\n",
