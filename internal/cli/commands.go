@@ -23,7 +23,7 @@ func Run(_ context.Context, args []string) exitcode.Exitcode {
 	case RunOnInputFiles:
 		return program.Start(opts.Verbose, opts.ForceColor, files)
 	case Usage:
-		return showUsage()
+		fallthrough
 	default:
 		return showUsage()
 	}
