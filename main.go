@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"flag"
 	"fmt"
 	"net/url"
 	"os"
@@ -23,7 +22,7 @@ const (
 	reset  = "\033[0m"
 )
 
-// CLI flags
+// CLI flags and files
 type options struct {
 	verbose    bool
 	forceColor bool
@@ -31,7 +30,8 @@ type options struct {
 }
 
 func main() {
-	opts := parseFlags()
+	// Parse command line arguments manually to match the bash script behavior exactly
+	opts := parseArgs(os.Args[1:])
 
 	// If no files provided, show usage
 	if len(opts.files) == 0 {
@@ -52,7 +52,7 @@ func main() {
 			continue
 		}
 
-		// Get directory of the current file to resolve relative paths
+		// Get the directory of the current file to resolve relative paths
 		dir := filepath.Dir(file)
 
 		// Extract links from the markdown file
@@ -88,13 +88,11 @@ func main() {
 			// Construct the full path relative to the file's location
 			fullPath := filepath.Join(dir, decodedLink)
 
-			// Use base filename only for error messages (to match bash script output)
-			baseFilename := filepath.Base(file)
-
+			// Use full file path for error messages to match bash script output
 			if _, err := os.Stat(fullPath); os.IsNotExist(err) {
 				// Print the file location in bold - match exact format from the bash script
 				fmt.Printf("%s%s:%d:%d:%s %sbroken relative link (file not found):%s\n",
-					colors.bold, baseFilename, link.line, link.col, colors.reset, colors.red, colors.reset)
+					colors.bold, file, link.line, link.col, colors.reset, colors.red, colors.reset)
 
 				// Extract the line content for context
 				lineContent, _ := getLineContent(file, link.line)
@@ -113,7 +111,7 @@ func main() {
 
 				if !contains(anchors, linkAnchor) {
 					fmt.Printf("%s%s:%d:%d:%s %sbroken relative link (anchor not found):%s\n",
-						colors.bold, baseFilename, link.line, link.col, colors.reset, colors.red, colors.reset)
+						colors.bold, file, link.line, link.col, colors.reset, colors.red, colors.reset)
 					lineContent, _ := getLineContent(file, link.line)
 					fmt.Println(lineContent)
 					fmt.Printf("%s%s%s\n", colors.yellow, strings.Repeat(" ", link.col-1)+"^", colors.reset)
@@ -163,8 +161,43 @@ type Link struct {
 	col  int
 }
 
-// Markdown link regex pattern - matches relative links like [text](./path) or [text](../path)
-var relativeLinkPattern = regexp.MustCompile(`\]\((\.\.?/[^)]*)\)`)
+// Manually parse command-line arguments to exactly match bash script behavior
+func parseArgs(args []string) options {
+	opts := options{
+		verbose:    false,
+		forceColor: false,
+		files:      []string{},
+	}
+
+	for i := 0; i < len(args); i++ {
+		arg := args[i]
+		switch arg {
+		case "--verbose":
+			opts.verbose = true
+		case "--color=always":
+			opts.forceColor = true
+		case "run":
+			// Use git ls-files to find all markdown files
+			cmd := exec.Command("git", "ls-files", "*.md")
+			var out bytes.Buffer
+			cmd.Stdout = &out
+
+			if err := cmd.Run(); err == nil {
+				scanner := bufio.NewScanner(&out)
+				for scanner.Scan() {
+					opts.files = append(opts.files, scanner.Text())
+				}
+			}
+		default:
+			opts.files = append(opts.files, arg)
+		}
+	}
+
+	return opts
+}
+
+// Markdown link regex pattern - matches relative links with ./ or ../ prefixes
+var relativeLinkPattern = regexp.MustCompile(`\]\(\.[^)]*\)`)
 
 // extracts relative links from a markdown file
 func extractRelativeLinks(filename string) ([]Link, error) {
@@ -195,19 +228,18 @@ func extractRelativeLinks(filename string) ([]Link, error) {
 		}
 
 		// Find relative links in the line
-		matches := relativeLinkPattern.FindAllStringSubmatchIndex(line, -1)
+		// This uses the exact same regex pattern as the bash script
+		matches := relativeLinkPattern.FindAllStringIndex(line, -1)
 		for _, match := range matches {
-			// match[0], match[1] is the entire match
-			// match[2], match[3] is the capture group (\.\.?/[^)]*)
-			start, end := match[2], match[3]
-			// Extract URL from the capture group
-			url := line[start:end]
-			// Calculate column position - we need to adjust to where the link actually starts
-			urlStartInMarkdown := strings.LastIndex(line[:start], "(") + 1
+			start, end := match[0], match[1]
+			// Extract URL without ]( and )
+			url := line[start+2 : end-1]
+			// Column position is start+2 (to match the bash script)
+			colPosition := start + 2
 			links = append(links, Link{
 				url:  url,
 				line: lineNumber,
-				col:  urlStartInMarkdown + 1, // +1 because columns start at 1
+				col:  colPosition + 1, // +1 because columns start at 1
 			})
 		}
 	}
@@ -255,26 +287,26 @@ func getMarkdownAnchors(filename string) ([]string, error) {
 			continue
 		}
 
-		// Match headings
+		// Match headings with regex pattern similar to bash script
 		if strings.HasPrefix(line, "#") {
-			// Extract heading text without leading #s
-			headingParts := strings.SplitN(line, " ", 2)
-			if len(headingParts) < 2 {
+			// Match at least one # followed by a space
+			if !regexp.MustCompile(`^#{1,6} `).MatchString(line) {
 				continue
 			}
 
-			heading := strings.TrimSpace(headingParts[1])
+			// Extract heading text without the leading #s
+			heading := regexp.MustCompile(`^#+[ \t]+`).ReplaceAllString(line, "")
+			// Remove trailing spaces
+			heading = strings.TrimRight(heading, " \t")
 
 			// Convert to GitHub-style anchor
 			anchor := strings.ToLower(heading)
 			// Remove anything that's not alphanumeric, space, or hyphen
-			re := regexp.MustCompile(`[^a-z0-9 -]`)
-			anchor = re.ReplaceAllString(anchor, "")
+			anchor = regexp.MustCompile(`[^a-z0-9 -]`).ReplaceAllString(anchor, "")
 			// Convert spaces to hyphens
 			anchor = strings.ReplaceAll(anchor, " ", "-")
 			// Replace multiple hyphens with single hyphen
-			re = regexp.MustCompile(`-+`)
-			anchor = re.ReplaceAllString(anchor, "-")
+			anchor = regexp.MustCompile(`-+`).ReplaceAllString(anchor, "-")
 			// Trim trailing hyphens
 			anchor = strings.TrimRight(anchor, "-")
 
@@ -338,60 +370,6 @@ func isTerminal() bool {
 		return false
 	}
 	return (fileInfo.Mode() & os.ModeCharDevice) != 0
-}
-
-// parses command-line flags
-func parseFlags() options {
-	// Define the flags
-	flagSet := flag.NewFlagSet("relcheck", flag.ExitOnError)
-	verbose := flagSet.Bool("verbose", false, "Enable verbose output")
-	color := flagSet.Bool("color", false, "Force color output")
-
-	// Special handling for --color=always format
-	colorAlways := false
-	for i, arg := range os.Args {
-		if arg == "--color=always" {
-			// Remove this arg to avoid flagSet parsing error
-			os.Args = append(os.Args[:i], os.Args[i+1:]...)
-			colorAlways = true
-			break
-		}
-	}
-
-	// Parse the remaining flags
-	err := flagSet.Parse(os.Args[1:])
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error parsing flags: %v\n", err)
-		os.Exit(1)
-	}
-
-	opts := options{
-		verbose:    *verbose,
-		forceColor: *color || colorAlways,
-		files:      []string{},
-	}
-
-	// Process remaining arguments
-	args := flagSet.Args()
-	for i, arg := range args {
-		if i == 0 && arg == "run" {
-			// Use git ls-files to find all markdown files
-			cmd := exec.Command("git", "ls-files", "*.md", "*.markdown")
-			var out bytes.Buffer
-			cmd.Stdout = &out
-
-			if err := cmd.Run(); err == nil {
-				scanner := bufio.NewScanner(&out)
-				for scanner.Scan() {
-					opts.files = append(opts.files, scanner.Text())
-				}
-			}
-		} else {
-			opts.files = append(opts.files, arg)
-		}
-	}
-
-	return opts
 }
 
 // checks if a slice contains a string
