@@ -54,7 +54,7 @@ The reported broken links such as `dist/brew/README.md:5:19` are clickable in th
 ```sh
 $ relcheck all
 dist/brew/README.md:5:19: broken relative link (file not found):
-- [`values.bash`](./values.sh) is required by the [render-template](https://github.com/anttiharju/actions/tree/v0/render-template) action.
+- [`values.bash`](./values.sh) is required by the [render-template](https://github.com/anttiharju/actions/tree/v1/render-template) action.
                   ^
 ```
 
@@ -79,7 +79,7 @@ pre-commit:
 
 ### GitHub Actions
 
-A composite action is available through my [actions monorepo](https://github.com/anttiharju/actions/tree/v0/relcheck). Here is a minimal `.github/workflows/build.yml` example:
+A composite action is available through my [actions monorepo](https://github.com/anttiharju/actions/tree/v1/relcheck). Here is a minimal `.github/workflows/build.yml` example:
 
 ```yml
 name: Build
@@ -98,7 +98,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: relcheck
-        uses: anttiharju/actions/relcheck@v0
+        uses: anttiharju/actions/relcheck@v1
 ```
 
 ## Stargazers over time
