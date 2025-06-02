@@ -44,17 +44,17 @@ jobs:
           gh release download "$TAG" --pattern '${{ github.event.repository.name }}-*64.tar.gz'
           ls -- *.tar.gz
       - name: Render formula template
-        uses: anttiharju/actions/render-template@v0
+        uses: anttiharju/actions/render-template@v1
         with:
           template: dist/brew/template.rb
           values: dist/brew/values.bash
           output: homebrew-tap/Formula/${{ github.event.repository.name }}.rb
       - name: Commit changes
-        uses: anttiharju/actions/commit-changes@v0
+        uses: anttiharju/actions/commit-changes@v1
         with:
           committer: "${{ github.actor }}[bot]"
           message: |
-            Update ${{ github.event.repository.name }} formula to ${{ inputs.tag }}
+            Update ${{ github.event.repository.name }} to ${{ inputs.tag }}
 
             https://github.com/${{ github.repository }}/blob/${{ github.sha }}/.github/workflows/distribute.yml
           working-directory: homebrew-tap
