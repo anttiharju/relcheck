@@ -50,9 +50,6 @@ dist/brew/*.rb
 # Packaging happens under this directory
 tmp
 
-# rubocop-file action
-/*.lock
-
 # integration tests
 tests/got
 tests/.exit_code
