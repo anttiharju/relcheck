@@ -20,7 +20,7 @@ type Result struct {
 var scanCache = make(map[string]Result)
 
 var (
-	relativeLinkPattern = regexp.MustCompile(`\]\(\.[^)]*\)`) // catch ./ or ../ prefixes
+	relativeLinkPattern = regexp.MustCompile(`\]\(\.[^)"]*(?:"[^"]*")?\)`)
 	headingPattern      = regexp.MustCompile(`^#{1,6} `)
 	headingTextPattern  = regexp.MustCompile(`^#+[ \t]+`)
 )
@@ -101,9 +101,16 @@ func extractLink(links *[]link.Link, line string, lineNumber int) {
 	for _, match := range matches {
 		start, end := match[0], match[1]
 		// Extract URL without ]( and )
-		urlText := line[start+2 : end-1]
+		rawURL := line[start+2 : end-1]
 		// Skip ](
 		colPosition := start + 2
+
+		// Handle alt text in quotes if present
+		urlText := rawURL
+		if idx := strings.Index(rawURL, "\""); idx != -1 {
+			// Only take the part before the quote
+			urlText = strings.TrimSpace(rawURL[:idx])
+		}
 
 		path, anchorText := link.SplitLinkAndAnchor(urlText)
 
