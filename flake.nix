@@ -1,5 +1,5 @@
 {
-  description = "Description for the project";
+  description = "Performant relative link checker";
 
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
