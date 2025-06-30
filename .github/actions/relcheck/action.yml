@@ -1,0 +1,24 @@
+name: relcheck
+description: Runs relcheck on default settings
+
+runs:
+  using: "composite"
+  steps:
+    - name: Decide which way to run
+      id: decide
+      shell: sh
+      run: |
+        if [ -f relcheck ]; then
+          echo "Using local relcheck"
+          echo "relcheck=local" >> "$GITHUB_OUTPUT"
+        else
+          echo "Using relcheck from anttiharju/actions/relcheck@v1"
+          echo "relcheck=remote" >> "$GITHUB_OUTPUT"
+        fi
+    - if: steps.decide.outputs.relcheck == 'remote'
+      name: relcheck
+      uses: anttiharju/actions/relcheck@v1
+    - if: steps.decide.outputs.relcheck == 'local'
+      name: relcheck
+      shell: sh
+      run: ./relcheck all --verbose --color=always
