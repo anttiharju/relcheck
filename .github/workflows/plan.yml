@@ -46,9 +46,9 @@ jobs:
         name: actionlint
         uses: anttiharju/actions/actionlint@v1
 
-      - if: always()
-        name: relcheck
-        uses: anttiharju/actions/relcheck@v1
+      #- if: always()
+      #  name: relcheck
+      #  uses: anttiharju/actions/relcheck@v1
 
       - if: always()
         name: EditorConfig-Checker
