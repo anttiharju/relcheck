@@ -56,7 +56,7 @@ jobs:
 
       - if: always()
         name: relcheck
-        run: ./relcheck all --verbose --color=always
+        uses: ./.github/actions/relcheck
 
       - if: always() && (steps.changed.outputs.binary == 'true' || github.event_name != 'pull_request')
         name: go test
