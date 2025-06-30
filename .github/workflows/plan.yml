@@ -46,10 +46,6 @@ jobs:
         name: actionlint
         uses: anttiharju/actions/actionlint@v1
 
-      #- if: always()
-      #  name: relcheck
-      #  uses: anttiharju/actions/relcheck@v1
-
       - if: always()
         name: EditorConfig-Checker
         uses: anttiharju/actions/editorconfig-checker@v1
@@ -57,6 +53,10 @@ jobs:
       - if: always() && (steps.changed.outputs.binary == 'true' || github.event_name != 'pull_request')
         name: go build
         uses: anttiharju/actions/go-build@v1
+
+      - if: always()
+        name: relcheck
+        run: ./relcheck all --verbose --color=always
 
       - if: always() && (steps.changed.outputs.binary == 'true' || github.event_name != 'pull_request')
         name: go test
