@@ -40,6 +40,10 @@ We can even setup static checking for relative links that we want to have as URL
 <!--[README](./README.md) https://anttiharju.dev/relcheck/comment-trick-explained -->
 ```
 
+## Short relative links
+
+[See counterexamples here](issues%20caught.markdown)
+
 ## Image links
 
 ![relcheck](../relcheck.png "alt text")
