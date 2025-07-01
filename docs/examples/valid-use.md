@@ -25,6 +25,10 @@ Markdown links within code blocks are ignored so because they would not be click
 [nonexistent](./non.md#existent)
 ```
 
+## ::nut_and_bolt:: Emojis
+
+[Like the one above](./valid-use.md#nut_and_bolt-emojis)
+
 ## Static check all the things
 
 We can even setup static checking for relative links that we want to have as URLs for whatever reason. Simply add a comment like
