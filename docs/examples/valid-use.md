@@ -29,8 +29,13 @@ We can even setup static checking for relative links that we want to have as URL
 <!--[README](./README.md) https://anttiharju.dev/relcheck/comment-trick-explained -->
 ```
 
-# Image links
+## Image links
 
 ![relcheck](../relcheck.png "alt text")
 
 alongside the URL to have the tool detect if the file gets moved in the repo. This makes refactoring project structure a lot less error-prone. Read more about this trick at [https://anttiharju.dev/relcheck/comment-trick-explained](../comment-trick-explained.md)
+
+### Also with single quotes alt text
+
+<!-- prettier-ignore -->
+![relcheck](../relcheck.png 'alt text')
