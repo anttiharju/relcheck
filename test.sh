@@ -1,6 +1,7 @@
 #!/bin/sh
 root="$(git rev-parse --show-toplevel)"
 cd "$root" || exit
+go build
 mkdir -p "$root/tests/got"
 
 tmp_exit_code="$root/tests/.exit_code"
