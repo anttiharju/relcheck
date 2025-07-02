@@ -44,7 +44,10 @@ alongside the URL to have the tool detect if the file gets moved in the repo. Th
 <!-- prettier-ignore -->
 ![relcheck](../relcheck.png 'alt text')
 
-Alternative headings
----
+## Alternative headings
 
 [alternative headings](./valid-use.md#alternative-headings)
+
+# Alternative headings with equal sign
+
+[alternative headings](./valid-use.md#alternative-headings-with-equal-sign)

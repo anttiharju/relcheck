@@ -24,6 +24,7 @@ var (
 	relativeLinkPattern = regexp.MustCompile(`\]\(\.[^)"']*(?:"[^"]*"|'[^']*')?\)`)
 	headingPattern      = regexp.MustCompile(`^#{1,6} `)
 	headingTextPattern  = regexp.MustCompile(`^#+[ \t]+`)
+	headingAltPattern   = regexp.MustCompile(`^(-+|=+)\s*$`)
 )
 
 func File(filepath string) (Result, error) {
@@ -60,25 +61,39 @@ func scanFile(file *os.File) (Result, error) {
 	lineNumber := 0
 	anchorCount := make(map[string]int)
 
+	var previousLine string // Store the previous line for altHeading detection
+
 	for scanner.Scan() {
 		lineNumber++
 		line := scanner.Text()
 
 		if hasCodeBlockMarker(line) {
 			inCodeBlock = !inCodeBlock
+			previousLine = line
 
 			continue
 		}
 
 		if inCodeBlock {
+			previousLine = line
+
+			continue
+		}
+
+		if extractAltHeading(&anchors, line, previousLine, anchorCount) {
+			previousLine = line
+
 			continue
 		}
 
 		if extractHeading(&anchors, line, anchorCount) {
-			continue // skip link extraction if line is a heading
+			previousLine = line
+
+			continue
 		}
 
 		extractLink(&links, line, lineNumber)
+		previousLine = line
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -139,10 +154,10 @@ func extractHeading(anchors *[]string, line string, anchorCount map[string]int) 
 
 	// Extract heading text without the leading #s
 	heading := headingTextPattern.ReplaceAllString(line, "")
+
 	// Remove trailing spaces
 	heading = strings.TrimRight(heading, " \t")
 
-	// Generate anchor
 	anchorText := anchor.GenerateAnchor(heading)
 
 	// Handle duplicate anchors
@@ -152,8 +167,29 @@ func extractHeading(anchors *[]string, line string, anchorCount map[string]int) 
 		*anchors = append(*anchors, anchorText)
 	}
 
-	// Increment the counter for this anchor
 	anchorCount[anchorText]++
 
 	return true
+}
+
+func extractAltHeading(anchors *[]string, currentLine string, previousLine string, anchorCount map[string]int) bool {
+	if previousLine != "" && !strings.HasPrefix(currentLine, "#") && headingAltPattern.MatchString(currentLine) {
+		// Remove trailing spaces
+		heading := strings.TrimRight(previousLine, " \t")
+
+		anchorText := anchor.GenerateAnchor(heading)
+
+		// Handle duplicate anchors
+		if count := anchorCount[anchorText]; count > 0 {
+			*anchors = append(*anchors, fmt.Sprintf("%s-%d", anchorText, count))
+		} else {
+			*anchors = append(*anchors, anchorText)
+		}
+
+		anchorCount[anchorText]++
+
+		return true
+	}
+
+	return false
 }
