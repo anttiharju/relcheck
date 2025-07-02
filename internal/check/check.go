@@ -111,15 +111,15 @@ func isAnchorValid(filepath, targetpath string, link link.Link, report *reporter
 			return false
 		}
 
-		// Check that the line number exists in the target
-		fileLineCount, err := fileutils.CountLines(targetpath)
+		// Check that the line number exists in the target by getting scan results
+		targetFile, err := scan.File(targetpath)
 		if err != nil {
 			report.ScanError(filepath, err)
 
 			return false
 		}
 
-		if lineNum <= 0 || lineNum > fileLineCount {
+		if lineNum <= 0 || lineNum > targetFile.LineCount {
 			report.BrokenLink(filepath, link, "line number out of range", link.LineContent)
 
 			return false
