@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-var validCharactersPattern = regexp.MustCompile(`[^a-z0-9 -]`)
+var validCharactersPattern = regexp.MustCompile(`[^a-z0-9 _-]`)
 
 var multipleHyphensPattern = regexp.MustCompile(`-+`)
 
