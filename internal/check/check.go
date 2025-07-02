@@ -100,6 +100,35 @@ func isLinkValid(filepath string, link link.Link, report *reporter.Reporter) boo
 }
 
 func isAnchorValid(filepath, targetpath string, link link.Link, report *reporter.Reporter) bool {
+	if len(link.Anchor) > 1 && link.Anchor[0] == 'L' {
+		// Validate the line number
+		lineNumStr := link.Anchor[1:]
+
+		lineNum, err := fileutils.ParseLineNumber(lineNumStr)
+		if err != nil {
+			report.BrokenLink(filepath, link, "invalid line number", link.LineContent)
+
+			return false
+		}
+
+		// Check that the line number exists in the target
+		fileLineCount, err := fileutils.CountLines(targetpath)
+		if err != nil {
+			report.ScanError(filepath, err)
+
+			return false
+		}
+
+		if lineNum <= 0 || lineNum > fileLineCount {
+			report.BrokenLink(filepath, link, "line number out of range", link.LineContent)
+
+			return false
+		}
+
+		return true
+	}
+
+	// It's a regular anchor link
 	targetFile, err := scan.File(targetpath)
 	if err != nil {
 		report.ScanError(filepath, err)
