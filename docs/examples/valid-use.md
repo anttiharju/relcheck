@@ -8,6 +8,10 @@ This document demonstrates valid use of relative links within markdown as recogn
 2. and so are links that traverse upwards [Introduction](../README.md)
 3. even files with spaces in their name are supported! See [Issues caught](./issues%20caught.markdown)
 
+### With line specified
+
+[like this](./valid-use.md#L5)
+
 ## Anchors
 
 1. Anchors can be validated [Introduction#why](../README.md#why)

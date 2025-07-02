@@ -12,8 +12,9 @@ import (
 )
 
 type Result struct {
-	Links   []link.Link
-	Anchors []string
+	Links     []link.Link
+	Anchors   []string
+	LineCount int
 }
 
 //nolint:gochecknoglobals
@@ -85,8 +86,9 @@ func scanFile(file *os.File) (Result, error) {
 	}
 
 	return Result{
-		Links:   links,
-		Anchors: anchors,
+		Links:     links,
+		Anchors:   anchors,
+		LineCount: lineNumber,
 	}, nil
 }
 
