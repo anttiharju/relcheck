@@ -110,7 +110,19 @@ func scanFile(file *os.File) (Result, error) {
 func hasCodeBlockMarker(line string) bool {
 	trimmedLine := strings.TrimLeft(line, " \t")
 
-	return strings.HasPrefix(trimmedLine, "```")
+	// Must start with ```
+	if !strings.HasPrefix(trimmedLine, "```") {
+		return false
+	}
+
+	afterMarker := trimmedLine[3:]
+
+	// Ensure code block is not closed on the same line
+	if !strings.Contains(afterMarker, "```") {
+		return true
+	}
+
+	return false
 }
 
 func extractLink(links *[]link.Link, line string, lineNumber int) {
