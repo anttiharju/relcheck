@@ -61,3 +61,7 @@ Alternative headings with equal sign
 <!-- prettier-ignore-end -->
 
 [alternative headings](./valid-use.md#alternative-headings-with-equal-sign)
+
+# L-starting headings
+
+[l-starting headings](./valid-use.md#L-starting-headings)
