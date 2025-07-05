@@ -28,6 +28,6 @@ func GenerateAnchor(heading string) string {
 	return anchor
 }
 
-func Exists(source string, target []string) bool {
+func Exists(target []string, source string) bool {
 	return slices.Contains(target, source)
 }

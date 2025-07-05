@@ -134,7 +134,7 @@ func isAnchorValid(filepath, targetpath string, link link.Link, report *reporter
 	}
 
 	// It's a regular anchor link
-	if !anchor.Exists(link.Anchor, targetFile.Anchors) {
+	if !anchor.Exists(targetFile.Anchors, link.Anchor) {
 		report.BrokenLink(filepath, link, "heading not found", link.LineContent)
 
 		return false
