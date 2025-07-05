@@ -92,6 +92,14 @@ func isLinkValid(filepath string, link link.Link, report *reporter.Reporter) boo
 		return false
 	}
 
+	// Then check if the target is a directory and has an anchor
+	isDir, err := fileutils.IsDirectory(fullpath)
+	if err == nil && isDir && link.Anchor != "" {
+		report.BrokenLink(filepath, link, "cannot refer to a heading of a directory", link.LineContent)
+
+		return false
+	}
+
 	// If link has an anchor, validate it
 	if link.Anchor != "" {
 		return isAnchorValid(filepath, fullpath, link, report)

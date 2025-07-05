@@ -7,3 +7,9 @@ Broken links, such as typos are caught [../REDME.md](../REDME.md).
 [1missues caught.markdown:22:88:[0m [31mbroken relative link (heading not found):[0m
 2. Non-existent "duplicate" (triplicate?) anchors are also caught [Introduction#why-2](../README.md#why-2)
 [33m                                                                                       ^[0m
+[1missues caught.markdown:28:11:[0m [31mbroken relative link (cannot refer to a heading of a directory):[0m
+[../#why](../#why).
+[33m          ^[0m
+[1missues caught.markdown:30:12:[0m [31mbroken relative link (cannot refer to a heading of a directory):[0m
+[..#why-1](..#why-1).
+[33m           ^[0m

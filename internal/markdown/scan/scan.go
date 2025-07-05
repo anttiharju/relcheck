@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/anttiharju/relcheck/internal/fileutils"
 	"github.com/anttiharju/relcheck/internal/markdown/anchor"
 	"github.com/anttiharju/relcheck/internal/markdown/link"
 )
@@ -31,6 +32,16 @@ func File(filepath string) (Result, error) {
 	// Check cache first
 	if result, ok := scanCache[filepath]; ok {
 		return result, nil
+	}
+
+	// Check if path is a directory
+	isDir, err := fileutils.IsDirectory(filepath)
+	if err != nil {
+		return Result{}, fmt.Errorf("failed to check path %s: %w", filepath, err)
+	}
+
+	if isDir {
+		return Result{}, fmt.Errorf("path is a directory, not a file: %s", filepath)
 	}
 
 	// Open the file

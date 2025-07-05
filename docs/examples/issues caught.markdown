@@ -20,3 +20,11 @@ Broken links, such as typos are caught [../REDME.md](../REDME.md).
 
 1. Similarly non-existent anchors are also caught [README.md#gitlab-actions](../README.md#gitlab-actions)
 2. Non-existent "duplicate" (triplicate?) anchors are also caught [Introduction#why-2](../README.md#why-2)
+
+## Directory anchors
+
+Referring to anchors in a directory is not valid. Therefore the tool tells you that for for example the following links:
+
+[../#why](../#why).
+
+[..#why-1](..#why-1).

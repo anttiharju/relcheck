@@ -14,6 +14,15 @@ func FileExists(path string) bool {
 	return !os.IsNotExist(err)
 }
 
+func IsDirectory(path string) (bool, error) {
+	info, err := os.Stat(path)
+	if err != nil {
+		return false, fmt.Errorf("failed to check directory %s: %w", path, err)
+	}
+
+	return info.IsDir(), nil
+}
+
 func ResolvePath(baseFile, relativePath string) string {
 	dir := filepath.Dir(baseFile)
 
