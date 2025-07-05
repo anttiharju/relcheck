@@ -7,6 +7,8 @@ runs:
     - name: Decide which way to run
       id: decide
       shell: sh
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       run: |
         if [ -f relcheck ]; then
           echo "Using local relcheck"
@@ -15,9 +17,12 @@ runs:
           echo "Using relcheck from anttiharju/actions/relcheck@v1"
           echo "relcheck=remote" >> "$GITHUB_OUTPUT"
         fi
+        echo "version=$(gh release view --repo anttiharju/relcheck --json name --jq .name)" >> "$GITHUB_OUTPUT"
     - if: steps.decide.outputs.relcheck == 'remote'
       name: relcheck
       uses: anttiharju/actions/relcheck@v1
+      with:
+        version: ${{ steps.decide.outputs.version }}
     - if: steps.decide.outputs.relcheck == 'local'
       name: relcheck
       shell: sh
