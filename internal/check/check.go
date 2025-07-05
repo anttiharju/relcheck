@@ -2,6 +2,7 @@ package check
 
 import (
 	"net/url"
+	"regexp"
 
 	"github.com/anttiharju/relcheck/internal/exitcode"
 	"github.com/anttiharju/relcheck/internal/fileutils"
@@ -99,6 +100,8 @@ func isLinkValid(filepath string, link link.Link, report *reporter.Reporter) boo
 	return true
 }
 
+var lineRegex = regexp.MustCompile(`^L\d+$`)
+
 func isAnchorValid(filepath, targetpath string, link link.Link, report *reporter.Reporter) bool {
 	// Get scan results for the target file once
 	targetFile, err := scan.File(targetpath)
@@ -109,7 +112,7 @@ func isAnchorValid(filepath, targetpath string, link link.Link, report *reporter
 	}
 
 	// Check if it's a line link (e.g. #L5)
-	if len(link.Anchor) > 1 && link.Anchor[0] == 'L' {
+	if lineRegex.MatchString(link.Anchor) {
 		// Validate the line number
 		lineNumStr := link.Anchor[1:]
 
