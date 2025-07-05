@@ -44,7 +44,7 @@ func CountLines(path string) (int, error) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		return 0, fmt.Errorf("error scanning file: %w", err)
+		return 0, fmt.Errorf("error counting lines: %w", err)
 	}
 
 	return lineCount, nil
