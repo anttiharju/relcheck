@@ -25,6 +25,9 @@ Markdown links within code blocks are ignored so because they would not be click
 [nonexistent](./non.md#existent)
 ```
 
+<!-- prettier-ignore -->
+```also doesn't get confused by exotic formatting like this one```
+
 ## ::nut_and_bolt:: Emojis
 
 [Like the one above](./valid-use.md#nut_and_bolt-emojis)
