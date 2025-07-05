@@ -10,24 +10,30 @@ var validCharactersPattern = regexp.MustCompile(`[^a-z0-9 _-]`)
 
 var multipleHyphensPattern = regexp.MustCompile(`-+`)
 
-func GenerateAnchor(heading string) string {
-	anchor := strings.ToLower(heading)
+func normalise(anchor string) string {
+	normalised := strings.ToLower(anchor)
 
-	// Remove anything that's not alphanumeric, space, or hyphen
-	anchor = validCharactersPattern.ReplaceAllString(anchor, "")
+	// Remove anything that's not alphanumeric, space, underscore, or hyphen
+	normalised = validCharactersPattern.ReplaceAllString(normalised, "")
 
 	// Convert spaces to hyphens
-	anchor = strings.ReplaceAll(anchor, " ", "-")
+	normalised = strings.ReplaceAll(normalised, " ", "-")
 
 	// Replace multiple hyphens with single hyphen
-	anchor = multipleHyphensPattern.ReplaceAllString(anchor, "-")
+	normalised = multipleHyphensPattern.ReplaceAllString(normalised, "-")
 
 	// Trim trailing hyphens
-	anchor = strings.TrimRight(anchor, "-")
+	normalised = strings.TrimRight(normalised, "-")
 
-	return anchor
+	return normalised
 }
 
-func Exists(source string, target []string) bool {
-	return slices.Contains(target, source)
+func GenerateAnchor(heading string) string {
+	return normalise(heading)
+}
+
+func Exists(target []string, source string) bool {
+	normalizedSource := normalise(source)
+
+	return slices.Contains(target, normalizedSource)
 }
