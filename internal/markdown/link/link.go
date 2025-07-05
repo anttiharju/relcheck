@@ -17,7 +17,15 @@ type Link struct {
 func SplitLinkAndAnchor(link string) (string, string) {
 	parts := strings.SplitN(link, "#", 2)
 	if len(parts) == 2 {
-		return parts[0], parts[1]
+		pathPart := parts[0]
+		anchorPart := parts[1]
+
+		// If the path part is empty, treat the link as relative to current directory
+		if pathPart == "" {
+			return ".", anchorPart
+		}
+
+		return pathPart, anchorPart
 	}
 
 	return link, ""
