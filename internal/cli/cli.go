@@ -2,6 +2,8 @@ package cli
 
 import (
 	"context"
+	"fmt"
+	"os"
 
 	"github.com/anttiharju/relcheck/internal/check"
 	"github.com/anttiharju/relcheck/internal/exitcode"
@@ -17,15 +19,18 @@ const (
 	ShowVersion
 	RunOnAllMarkdown
 	RunOnInputFiles
+	InvalidArgs
 )
 
 type Options struct {
 	Verbose    bool
 	ForceColor bool
+	Directory  string
 }
 
 func Run(_ context.Context, args []string) exitcode.Exitcode {
 	cmd, opts, inputFiles := ParseArgs(args)
+
 	switch cmd {
 	case Usage:
 		return usage.Print()
@@ -33,6 +38,8 @@ func Run(_ context.Context, args []string) exitcode.Exitcode {
 		return version.Print()
 	case RunOnAllMarkdown:
 		return check.RelativeLinksAndAnchors(opts.Verbose, opts.ForceColor, git.ListMarkdownFiles())
+	case InvalidArgs:
+		return exitcode.InvalidArgs
 	case RunOnInputFiles:
 		fallthrough
 	default:
@@ -45,24 +52,25 @@ func ParseArgs(args []string) (Command, Options, []string) {
 	options := Options{
 		Verbose:    false,
 		ForceColor: false,
+		Directory:  "",
 	}
 	inputFiles := []string{}
 
-	for i := range args {
-		arg := args[i]
-		switch arg {
-		case "--verbose":
-			options.Verbose = true
-		case "--color=always":
-			options.ForceColor = true
-		case "version":
-			command = ShowVersion
-		case "all":
-			command = RunOnAllMarkdown
-		default:
-			command = RunOnInputFiles
+	index := 0
+	for index < len(args) {
+		arg := args[index]
+		index++
 
-			inputFiles = append(inputFiles, arg)
+		if handleOption(arg, &options, &command, &inputFiles, &index, args) {
+			continue
+		}
+	}
+
+	if options.Directory != "" {
+		if err := os.Chdir(options.Directory); err != nil {
+			fmt.Println("Error: Unable to change directory.")
+
+			command = InvalidArgs
 		}
 	}
 
@@ -71,4 +79,37 @@ func ParseArgs(args []string) (Command, Options, []string) {
 	}
 
 	return command, options, inputFiles
+}
+
+func handleOption(
+	arg string,
+	options *Options,
+	command *Command,
+	inputFiles *[]string,
+	index *int,
+	args []string,
+) bool {
+	switch arg {
+	case "--verbose":
+		options.Verbose = true
+	case "--color=always":
+		options.ForceColor = true
+	case "-C", "--directory":
+		if *index < len(args) {
+			options.Directory = args[*index]
+			*index++
+		} else {
+			*command = Usage
+		}
+	case "version", "-v", "--version":
+		*command = ShowVersion
+	case "all":
+		*command = RunOnAllMarkdown
+	default:
+		*command = RunOnInputFiles
+
+		*inputFiles = append(*inputFiles, arg)
+	}
+
+	return true
 }
