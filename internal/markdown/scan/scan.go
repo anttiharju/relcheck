@@ -63,12 +63,37 @@ func File(filepath string) (Result, error) {
 	return result, nil
 }
 
+func isHTMLCommentLine(line string, inHTMLComment bool) (bool, bool) {
+	trimmed := strings.TrimSpace(line)
+
+	// Entering a multi-line comment
+	if strings.HasPrefix(trimmed, "<!--") && !strings.Contains(trimmed, "-->") {
+		return true, true
+	}
+	// Inside a multi-line comment
+	if inHTMLComment {
+		if strings.Contains(trimmed, "-->") {
+			return true, false
+		}
+
+		return true, true
+	}
+	// Single-line comment
+	if strings.HasPrefix(trimmed, "<!--") && strings.Contains(trimmed, "-->") {
+		return true, false
+	}
+	// Not a comment
+	return false, inHTMLComment
+}
+
+//nolint:funlen // the function is pretty simple even if it is long
 func scanFile(file *os.File) (Result, error) {
 	links := []link.Link{}
 	anchors := []string{}
 
 	scanner := bufio.NewScanner(file)
 	inCodeBlock := false
+	inHTMLComment := false
 	lineNumber := 0
 	anchorCount := make(map[string]int)
 
@@ -77,6 +102,15 @@ func scanFile(file *os.File) (Result, error) {
 	for scanner.Scan() {
 		lineNumber++
 		line := scanner.Text()
+
+		skip, newInHTMLComment := isHTMLCommentLine(line, inHTMLComment)
+		inHTMLComment = newInHTMLComment
+
+		if skip {
+			previousLine = line
+
+			continue
+		}
 
 		if hasCodeBlockMarker(line) {
 			inCodeBlock = !inCodeBlock

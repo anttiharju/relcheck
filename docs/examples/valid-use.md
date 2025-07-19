@@ -68,3 +68,5 @@ Alternative headings with equal sign
 # L-starting headings
 
 [l-starting headings](./valid-use.md#L-starting-headings)
+
+<!--[README](./README.md) https://anttiharju.dev/relcheck/comment-trick-explained -->
