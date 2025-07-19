@@ -70,3 +70,7 @@ Alternative headings with equal sign
 [l-starting headings](./valid-use.md#L-starting-headings)
 
 <!--[README](./README.md) https://anttiharju.dev/relcheck/comment-trick-explained -->
+
+# [Headings that are links are also ok](https://example.com)
+
+[Easy peasy](./valid-use.md#headings-that-are-links-are-also-ok)
