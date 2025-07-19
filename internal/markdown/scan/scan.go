@@ -26,6 +26,7 @@ var (
 	headingPattern      = regexp.MustCompile(`^#{1,6} `)
 	headingTextPattern  = regexp.MustCompile(`^#+[ \t]+`)
 	headingAltPattern   = regexp.MustCompile(`^(-+|=+)\s*$`)
+	markdownLinkPattern = regexp.MustCompile(`\[(.*?)\]\([^\)]*\)`)
 )
 
 func File(filepath string) (Result, error) {
@@ -214,6 +215,9 @@ func extractHeading(anchors *[]string, line string, anchorCount map[string]int) 
 
 	// Remove trailing spaces
 	heading = strings.TrimRight(heading, " \t")
+
+	// Remove markdown link syntax from heading
+	heading = markdownLinkPattern.ReplaceAllString(heading, "$1")
 
 	anchorText := anchor.GenerateAnchor(heading)
 
