@@ -2,24 +2,38 @@
   description = "Performant relative link checker";
 
   inputs = {
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-25.05";
   };
 
-  outputs = inputs@{ flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
-      perSystem = { config, self', inputs', pkgs, system, ... }: {
-        packages.default = pkgs.buildGoModule {
-          name = "relcheck";
-          src = ./.;
-          vendorHash = null;
+  outputs =
+    { self, nixpkgs }:
+    let
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
+      ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in
+    {
+      packages = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        {
+          default = pkgs.buildGoModule {
+            name = "relcheck";
+            src = ./.;
+            vendorHash = null;
 
-          installPhase = ''
-            mkdir -p $out/bin
-            install -Dm755 $GOPATH/bin/relcheck $out/bin/relcheck
-          '';
-        };
-      };
+            installPhase = ''
+              mkdir -p $out/bin
+              install -Dm755 $GOPATH/bin/relcheck $out/bin/relcheck
+            '';
+          };
+        }
+      );
     };
 }
