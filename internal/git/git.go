@@ -2,11 +2,12 @@ package git
 
 import (
 	"bytes"
+	"context"
 	"os/exec"
 )
 
-func ListMarkdownFiles() []string {
-	out, err := exec.Command("git", "ls-files", "-z", "*.md").Output()
+func ListMarkdownFiles(ctx context.Context) []string {
+	out, err := exec.CommandContext(ctx, "git", "ls-files", "-z", "*.md").Output()
 	if err != nil {
 		return nil
 	}

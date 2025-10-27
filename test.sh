@@ -23,7 +23,8 @@ echo 0 > "$tmp_exit_code"
 
 (
     cd docs/examples || exit
-    ../../relcheck --verbose --color=always "$(git ls-files '*.markdown')" > "../../tests/got/issues caught"
+    files=$(git ls-files '*.markdown')
+    ../../relcheck --verbose --color=always "$files" > "../../tests/got/issues caught"
     cd ../../tests || exit
 
     if [ "$1" = "--regenerate" ]; then

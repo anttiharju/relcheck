@@ -6,8 +6,7 @@ on:
     branches:
       - wildcard
     paths:
-      - ".github/workflows/*.yml"
-      - "**/action.yml"
+      - "pkgs/github/**/*"
 
 jobs:
   wildcard:

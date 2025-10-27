@@ -1,3 +1,3 @@
 module github.com/anttiharju/relcheck
 
-go 1.24.3
+go 1.24.6

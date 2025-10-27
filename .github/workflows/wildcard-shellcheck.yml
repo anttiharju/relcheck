@@ -1,14 +1,13 @@
-name: Wildcard
 permissions:
-  contents: read
-  pull-requests: read
+  contents: none
+  pull-requests: none
 on:
   push:
     branches:
       - wildcard
     paths:
       - "**/*.sh"
-      - "**/*.bash"
+      - ".shellcheckrc"
 
 jobs:
   wildcard:

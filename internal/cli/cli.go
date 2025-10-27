@@ -28,7 +28,7 @@ type Options struct {
 	Directory  string
 }
 
-func Run(_ context.Context, args []string) exitcode.Exitcode {
+func Run(ctx context.Context, args []string) exitcode.Exitcode {
 	cmd, opts, inputFiles := ParseArgs(args)
 
 	switch cmd {
@@ -37,7 +37,7 @@ func Run(_ context.Context, args []string) exitcode.Exitcode {
 	case ShowVersion:
 		return version.Print()
 	case RunOnAllMarkdown:
-		return check.RelativeLinksAndAnchors(opts.Verbose, opts.ForceColor, git.ListMarkdownFiles())
+		return check.RelativeLinksAndAnchors(opts.Verbose, opts.ForceColor, git.ListMarkdownFiles(ctx))
 	case InvalidArgs:
 		return exitcode.InvalidArgs
 	case RunOnInputFiles:
