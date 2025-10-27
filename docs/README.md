@@ -98,7 +98,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: relcheck
-        uses: anttiharju/actions/relcheck@v1
+        uses: anttiharju/actions/relcheck@v0
 ```
 
 ## Stargazers over time

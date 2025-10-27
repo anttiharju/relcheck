@@ -14,13 +14,13 @@ runs:
           echo "Using local relcheck"
           echo "relcheck=local" >> "$GITHUB_OUTPUT"
         else
-          echo "Using relcheck from anttiharju/actions/relcheck@v1"
+          echo "Using relcheck from anttiharju/actions/relcheck@v0"
           echo "relcheck=remote" >> "$GITHUB_OUTPUT"
         fi
         echo "version=$(gh release view --repo anttiharju/relcheck --json name --jq .name)" >> "$GITHUB_OUTPUT"
     - if: steps.decide.outputs.relcheck == 'remote'
       name: relcheck
-      uses: anttiharju/actions/relcheck@v1
+      uses: anttiharju/actions/relcheck@v0
       with:
         version: ${{ steps.decide.outputs.version }}
     - if: steps.decide.outputs.relcheck == 'local'
