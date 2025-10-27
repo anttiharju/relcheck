@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/anttiharju/relcheck/internal/buildinfo"
 	"github.com/anttiharju/relcheck/internal/check"
 	"github.com/anttiharju/relcheck/internal/exitcode"
 	"github.com/anttiharju/relcheck/internal/git"
 	"github.com/anttiharju/relcheck/internal/usage"
-	"github.com/anttiharju/relcheck/internal/version"
 )
 
 type Command int
@@ -28,14 +28,14 @@ type Options struct {
 	Directory  string
 }
 
-func Run(ctx context.Context, args []string) exitcode.Exitcode {
+func Run(ctx context.Context, info buildinfo.BuildInfo, args []string) exitcode.Exitcode {
 	cmd, opts, inputFiles := ParseArgs(args)
 
 	switch cmd {
 	case Usage:
 		return usage.Print()
 	case ShowVersion:
-		return version.Print()
+		return buildinfo.Print(info)
 	case RunOnAllMarkdown:
 		return check.RelativeLinksAndAnchors(opts.Verbose, opts.ForceColor, git.ListMarkdownFiles(ctx))
 	case InvalidArgs:
