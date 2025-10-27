@@ -11,5 +11,13 @@ buildGoModule {
     hash = "${PKG_HASH}";
   };
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.revision=${PKG_REV}"
+    "-X main.version=${PKG_VERSION}"
+    "-X main.time=${PKG_TIME}"
+  ];
+
   vendorHash = null;
 }
