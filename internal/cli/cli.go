@@ -28,7 +28,7 @@ type Options struct {
 	Directory  string
 }
 
-func Run(ctx context.Context, info buildinfo.BuildInfo, args []string) exitcode.Exitcode {
+func Start(ctx context.Context, info buildinfo.BuildInfo, args []string) exitcode.Exitcode {
 	cmd, opts, inputFiles := ParseArgs(args)
 
 	switch cmd {
