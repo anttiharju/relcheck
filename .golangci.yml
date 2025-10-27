@@ -81,7 +81,7 @@ linters:
     - wastedassign
     - whitespace
     - wrapcheck
-    - wsl
+    - wsl_v5
     - zerologlint
   exclusions:
     generated: lax
@@ -94,6 +94,11 @@ linters:
       - third_party$
       - builtin$
       - examples$
+    rules:
+      - path: '(.+)_test\.go'
+        linters:
+          - funlen
+          - varnamelen
 formatters:
   enable:
     - gci
