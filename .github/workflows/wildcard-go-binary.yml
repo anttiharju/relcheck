@@ -1,16 +1,16 @@
-name: Wildcard
 permissions:
-  contents: read
-  pull-requests: read
+  contents: none
+  pull-requests: none
 on:
   push:
     branches:
       - wildcard
     paths:
       - "internal/**/*"
+      - "*.go"
+      - "go.*"
+      # relcheck-specific:
       - "tests/**/*"
-      - "go.mod"
-      - "main.go"
       - "test.sh"
 
 jobs:
