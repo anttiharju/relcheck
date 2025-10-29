@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub }:
+{ buildGoModule, fetchFromGitHub, git }:
 
 buildGoModule {
   pname = "${PKG_REPO}";
@@ -10,6 +10,8 @@ buildGoModule {
     rev = "${PKG_REV}";
     hash = "${PKG_HASH}";
   };
+
+  buildInputs = [ git ];
 
   ldflags = [
     "-s"
