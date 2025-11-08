@@ -124,11 +124,6 @@ jobs:
           actionlint -color
 
       - if: always() && !cancelled()
-        name: relcheck
-        run: |
-          relcheck all --verbose --color=always
-
-      - if: always() && !cancelled()
         name: EditorConfig-Checker
         run: |
           git ls-files -z | xargs -0 editorconfig-checker
@@ -137,10 +132,15 @@ jobs:
         name: Ensure go.mod has matching Go version
         uses: ./.github/actions/match-go-version
 
-      - if: always() && !cancelled() && (steps.changed.outputs.binary == 'true' || github.event_name == 'push')
+      - if: always() && !cancelled()
         name: go build
         run: |
           go build
+
+      - if: always() && !cancelled()
+        name: relcheck
+        run: |
+          ./relcheck all --verbose --color=always
 
       - if: always() && !cancelled() && (steps.changed.outputs.binary == 'true' || github.event_name == 'push')
         name: go test
