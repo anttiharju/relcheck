@@ -60,3 +60,7 @@ tmp
 # integration tests
 tests/got
 tests/.exit_code
+
+# Nix
+.direnv
+!flake.lock
