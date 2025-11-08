@@ -49,7 +49,7 @@ Although the recommendation is to setup a integration via Lefthook or GitHub Act
 
 ```yml
 - name: relcheck
-  uses: anttiharju/relcheck@v1.8.8
+  uses: anttiharju/relcheck@v1
 ```
 
 ## Integrations
