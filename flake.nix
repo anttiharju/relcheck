@@ -4,8 +4,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    nur-anttiharju.url = "github:anttiharju/nur-packages";
-    nur-anttiharju.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
@@ -13,7 +11,6 @@
       self,
       nixpkgs,
       nixpkgs-unstable,
-      nur-anttiharju,
       ...
     }:
     let
@@ -27,11 +24,10 @@
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
 
       devPackages =
-        pkgs: pkgs-unstable: anttiharju: system: with pkgs; [
+        pkgs: pkgs-unstable: system: with pkgs; [
           go
           action-validator
           actionlint
-          anttiharju.relcheck
           editorconfig-checker
           golangci-lint
           (python313.withPackages (
@@ -65,11 +61,10 @@
         let
           pkgs = import nixpkgs { inherit system; };
           pkgs-unstable = import nixpkgs-unstable { inherit system; };
-          anttiharju = nur-anttiharju.packages.${system};
         in
         {
           default = pkgs.mkShell {
-            packages = devPackages pkgs pkgs-unstable anttiharju system;
+            packages = devPackages pkgs pkgs-unstable system;
           };
         }
       );
@@ -79,7 +74,6 @@
         let
           pkgs = import nixpkgs { inherit system; };
           pkgs-unstable = import nixpkgs-unstable { inherit system; };
-          anttiharju = nur-anttiharju.packages.${system};
 
           # Fix not being able to run the unpatched node binaries that GitHub Actions mounts into the container
           nix-ld-setup = pkgs.runCommand "nix-ld-setup" { } ''
@@ -91,7 +85,7 @@
           ci = pkgs.dockerTools.streamLayeredImage {
             name = "ci";
             tag = container_version;
-            contents = (devPackages pkgs pkgs-unstable anttiharju system) ++ [
+            contents = (devPackages pkgs pkgs-unstable system) ++ [
               nix-ld-setup
               pkgs.dockerTools.caCertificates
               pkgs.sudo
