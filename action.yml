@@ -1,4 +1,4 @@
-name: relcheck
+name: relcheck-action
 description: Downloads, caches, and runs relcheck with verbose output on files tracked by Git.
 branding:
   icon: check
