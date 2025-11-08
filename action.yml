@@ -4,7 +4,7 @@ inputs:
   version:
     description: relcheck version in semver format without the 'v' prefix
     required: false
-    default: "1.8.7"
+    default: "1.8.8"
   install-path:
     description: Installation path without trailing slash for the binary
     required: false
