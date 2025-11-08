@@ -45,6 +45,13 @@ relcheck
 
 Although the recommendation is to setup a integration via Lefthook or GitHub Actions instead of manual use.
 
+### GitHub Actions
+
+```yml
+- name: relcheck
+  uses: anttiharju/relcheck@v1.8.8
+```
+
 ## Integrations
 
 ### VS Code
