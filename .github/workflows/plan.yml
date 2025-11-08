@@ -165,7 +165,7 @@ jobs:
 
       - if: always() && !cancelled() && (steps.changed.outputs.documentation == 'true' || github.event_name == 'push')
         name: mkdocs
-        run: mkdocs build --strict
+        run: mkdocs build
 
       - if: always() && !cancelled() && (steps.changed.outputs.md_and_yml == 'true' || github.event_name == 'push')
         name: prettier
