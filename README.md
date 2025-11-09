@@ -48,8 +48,23 @@ Although the recommendation is to setup a integration via Lefthook or GitHub Act
 ### GitHub Actions
 
 ```yml
-- name: relcheck
-  uses: anttiharju/relcheck@v1
+name: Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: relcheck
+        uses: anttiharju/relcheck@v1.8.10
 ```
 
 ## Integrations
@@ -82,30 +97,6 @@ pre-commit:
     # Install from https://github.com/anttiharju/relcheck
     - name: relcheck
       run: relcheck all
-```
-
-### GitHub Actions
-
-A composite action is available through my [actions monorepo](https://github.com/anttiharju/actions/tree/v1/relcheck). Here is a minimal `.github/workflows/build.yml` example:
-
-```yml
-name: Build
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-
-jobs:
-  validate:
-    name: Validate
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: relcheck
-        uses: anttiharju/actions/relcheck@v0
 ```
 
 ## Stargazers over time
