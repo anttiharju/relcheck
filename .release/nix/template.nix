@@ -21,7 +21,7 @@ buildGoModule {
 
   postInstall = ''
     wrapProgram "$out/bin/${PKG_REPO}" \
-      --prefix PATH : ${lib.makeBinPath [ git ]}
+      --prefix PATH : $${lib.makeBinPath [ git ]}
   '';
 
   ldflags = [
