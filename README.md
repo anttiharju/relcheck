@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: relcheck
-        uses: anttiharju/relcheck@v1.8.11
+        uses: anttiharju/relcheck@v1.8.12
 ```
 
 ## Integrations
