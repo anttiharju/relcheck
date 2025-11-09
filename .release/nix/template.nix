@@ -6,31 +6,41 @@
   makeWrapper,
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "${PKG_REPO}";
   version = "${PKG_VERSION}";
+  revision = "${PKG_REV}";
 
   src = fetchFromGitHub {
     owner = "${PKG_OWNER}";
-    repo = "${PKG_REPO}";
-    rev = "${PKG_REV}";
+    repo = pname;
+    rev = revision;
     hash = "${PKG_HASH}";
   };
+
+  vendorHash = null;
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram "$$out/bin/${PKG_REPO}" \
+    wrapProgram "$$out/bin/$${pname}" \
       --prefix PATH : $${lib.makeBinPath [ git ]}
   '';
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.revision=${PKG_REV}"
-    "-X main.version=${PKG_VERSION}"
+    "-X main.revision=$${revision}"
+    "-X main.version=$${version}"
     "-X main.time=${PKG_TIME}"
   ];
 
-  vendorHash = null;
+  meta = {
+    homepage = "${PKG_HOMEPAGE}";
+    description = "${PKG_DESC}";
+    changelog = "https://github.com/${PKG_OWNER}/${PKG_REPO}/releases/tag/v$${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ${PKG_OWNER} ];
+    mainProgram = pname;
+  };
 }
