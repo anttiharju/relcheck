@@ -41,6 +41,6 @@ buildGoModule rec {
     changelog = "https://github.com/${PKG_OWNER}/${PKG_REPO}/releases/tag/v$${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ${PKG_OWNER} ];
-    mainProgram = pname;
+    mainProgram = "${PKG_REPO}";
   };
 }
