@@ -48,7 +48,7 @@
           curl
           jq
           gzip
-          pkgs-unstable.envsubst
+          envsubst
           gawkInteractive
           perl538 # for shasum
           xz
