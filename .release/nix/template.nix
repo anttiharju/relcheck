@@ -13,7 +13,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "${PKG_OWNER}";
-    repo = pname;
+    repo = "${PKG_REPO}";
     rev = revision;
     hash = "${PKG_HASH}";
   };
