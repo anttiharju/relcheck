@@ -23,7 +23,7 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram "$$out/bin/$${pname}" \
+    wrapProgram "$$out/bin/${PKG_REPO}" \
       --prefix PATH : $${lib.makeBinPath [ git ]}
   '';
 
