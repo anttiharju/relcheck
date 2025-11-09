@@ -1,4 +1,10 @@
-{ buildGoModule, fetchFromGitHub, git }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+  makeWrapper,
+}:
 
 buildGoModule {
   pname = "${PKG_REPO}";
@@ -11,7 +17,12 @@ buildGoModule {
     hash = "${PKG_HASH}";
   };
 
-  buildInputs = [ git ];
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/${PKG_REPO}" \
+      --prefix PATH : ${lib.makeBinPath [ git ]}
+  '';
 
   ldflags = [
     "-s"
