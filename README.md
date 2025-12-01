@@ -17,17 +17,21 @@ Benchmark 1: relcheck all
 
 ## Installation
 
+### Brew
+
 ```sh
 brew install anttiharju/tap/relcheck
 ```
 
-Or download a binary from a GitHub release.
-
-### Updating
+Or download a binary from a GitHub release. Update with:
 
 ```sh
 brew update && brew upgrade relcheck
 ```
+
+### Nix
+
+Available via [anttiharju/nur-packages](https://github.com/anttiharju/nur-packages). Star the repo so I can release it on nixpkgs!
 
 ## Usage
 
