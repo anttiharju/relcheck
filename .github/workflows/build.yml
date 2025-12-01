@@ -12,7 +12,9 @@ jobs:
     name: Plan
     uses: ./.github/workflows/plan.yml
     permissions:
+      contents: write
       packages: write
+    secrets: inherit
 
   release:
     name: Release
