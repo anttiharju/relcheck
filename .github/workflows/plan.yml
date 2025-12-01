@@ -122,7 +122,7 @@ jobs:
         name: Ensure go.mod has matching Go version
         uses: ./.github/actions/match-go-version
 
-      - if: always() && !cancelled() && (steps.changed.outputs.go == 'true' || github.event_name == 'push')
+      - if: always() && !cancelled()
         name: go build
         run: |
           go build
