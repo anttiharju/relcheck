@@ -50,7 +50,7 @@
           # Everything below is required by GitHub Actions
           uutils-coreutils-noprefix
           bash
-          git
+          gitMinimal
           findutils
           gnutar
           curl
