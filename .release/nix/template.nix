@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   makeWrapper,
 }:
 
@@ -24,7 +24,7 @@ buildGoModule rec {
 
   postInstall = ''
     wrapProgram "$$out/bin/${PKG_REPO}" \
-      --prefix PATH : $${lib.makeBinPath [ git ]}
+      --prefix PATH : $${lib.makeBinPath [ gitMinimal ]}
   '';
 
   ldflags = [
