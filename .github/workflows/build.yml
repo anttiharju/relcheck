@@ -58,3 +58,10 @@ jobs:
         with:
           anttiharju-bot-id: ${{ secrets.ANTTIHARJU_BOT_ID }}
           anttiharju-bot-private-key: ${{ secrets.ANTTIHARJU_BOT_PRIVATE_KEY }}
+
+      - name: Lock release immutability
+        shell: sh
+        env:
+          tag: "v${{ needs.plan.outputs.version }}"
+        run: |
+          gh release edit "$tag" --draft=false
