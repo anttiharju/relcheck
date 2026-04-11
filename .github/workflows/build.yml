@@ -62,6 +62,7 @@ jobs:
       - name: Lock release immutability
         shell: sh
         env:
+          GH_TOKEN: ${{ github.token }}
           tag: "v${{ needs.plan.outputs.version }}"
         run: |
           gh release edit "$tag" --draft=false
